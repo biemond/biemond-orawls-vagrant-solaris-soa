@@ -26,7 +26,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     adminsol.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "4096"]
       vb.customize ["modifyvm", :id, "--name", "adminsol"]
-      vb.customize ["modifyvm", :id, "--cpus", 2]
+      vb.customize ["modifyvm", :id, "--cpus", 1]
     end
   
     adminsol.vm.provision :shell, :inline => "ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"
@@ -47,6 +47,51 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   
   end
+
+  config.vm.define "dbsol" , primary: true do |dbsol|
+    dbsol.vm.box = "solaris10-x86_64"
+    dbsol.vm.box_url = "https://dl.dropboxusercontent.com/s/an5bthwroh1i8k5/solaris10-x86_64.box"
+    #dbsol.vm.box_url = "/Users/edwin/Downloads/solaris10-x86_64.box"
+
+    dbsol.vm.hostname = "dbsol.example.com"
+    # dbsol.vm.network :forwarded_port, guest: 80, host: 8888 ,auto_correct: true
+    # dbsol.vm.network :forwarded_port, guest: 7001, host: 7001, auto_correct: true
+  
+    dbsol.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
+  
+    dbsol.vm.network :private_network, ip: "10.10.10.5"
+  
+    # dbsol.vm.network :public_network
+    # dbsol.ssh.forward_agent = true
+    # dbsol.vm.synced_folder "../data", "/vagrant_data"
+  
+    dbsol.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm"     , :id, "--memory", "2048"]
+      vb.customize ["modifyvm"     , :id, "--name", "dbsol"]
+      vb.customize ["modifyvm"     , :id, "--cpus", 1]
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
+    end
+
+  
+    dbsol.vm.provision :shell, :inline => "ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"
+    
+    dbsol.vm.provision :puppet do |puppet|
+      puppet.manifests_path    = "puppet/manifests"
+      puppet.module_path       = "puppet/modules"
+      puppet.manifest_file     = "db.pp"
+      puppet.options           = "--verbose --hiera_config /vagrant/puppet/hiera.yaml"
+  
+      puppet.facter = {
+        "environment" => "development",
+        "vm_type"     => "vagrant",
+        "env_app1"    => "application_One",
+        "env_app2"    => "application_Two",
+      }
+      
+    end
+  
+  end
+
   
   config.vm.define "nodesol1" do |node1|
 
