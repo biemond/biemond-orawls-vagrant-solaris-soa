@@ -2,6 +2,23 @@
 messageDefault: 'default'
 messageEnv:     'common'
 
+hosts:
+  'dbsol':
+    ip:                "10.10.10.5"
+    host_aliases:      - 'dbsol.example.com'
+                       - 'dbsol'
+  'adminsol':
+    ip:                "10.10.10.10"
+    host_aliases:      - 'adminsol.example.com'
+                       - 'adminsol'
+  'nodesol1':
+    ip:                "10.10.10.100"
+    host_aliases:      - 'nodesol1.example.com'
+                       - 'nodesol1'
+  'nodesol2':
+    ip:                "10.10.10.200"
+    host_aliases:      - 'nodesol2.example.com'
+                       - 'nodesol2'
 
 # global WebLogic vars
 wls_oracle_base_home_dir: &wls_oracle_base_home_dir "/opt/oracle"

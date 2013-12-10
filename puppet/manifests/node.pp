@@ -18,10 +18,9 @@ class os {
 
   notify { "class os ${operatingsystem}":} 
 
-  host{"adminsol":
-    ip => "10.10.10.10",
-    host_aliases => ['adminsol.example.com','adminsol'],
-  }
+  $default_params = {}
+  $host_instances = hiera('hosts', [])
+  create_resources('host',$host_instances, $default_params)
 
 
   group { 'dba' :

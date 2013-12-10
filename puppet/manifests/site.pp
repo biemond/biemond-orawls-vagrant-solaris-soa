@@ -27,15 +27,9 @@ class os {
 
   notice "class os ${operatingsystem}"
 
-  host{"node1":
-    ip => "10.10.10.100",
-    host_aliases => ['nodesol1.example.com','node1'],
-  }
-
-  host{"node2":
-    ip => "10.10.10.200",
-    host_aliases => ['nodesol2.example.com','node2'],
-  }
+  $default_params = {}
+  $host_instances = hiera('hosts', [])
+  create_resources('host',$host_instances, $default_params)
 
   group { 'dba' :
     ensure => present,

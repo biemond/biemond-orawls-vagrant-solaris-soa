@@ -85,14 +85,13 @@ define oradb::installdb( $version                 = undef,
       group       => $group,
       logoutput   => true,
     }
+
     File {
       ensure      => present,
       mode        => 0775,
       owner       => $user,
       group       => $group,
     }
-
-
 
     if $puppetDownloadMntPoint == undef {
       $mountPoint     = "puppet:///modules/oradb/"
@@ -115,6 +114,7 @@ define oradb::installdb( $version                 = undef,
         # http://raftaman.net/?p=1311 for generating password
         user { $user :
           ensure      => present,
+          gid         => $group,  
           groups      => $group,
           shell       => '/bin/bash',
           password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
@@ -279,7 +279,10 @@ define oradb::installdb( $version                 = undef,
         # In $downloadDir, will Puppet extract the ZIP files or is this a pre-extracted directory structure.
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"],Exec["extract ${path}/${file}_1of2.zip"],Exec["extract ${path}/${file}_2of2.zip"]],
+          require     => [File ["${oraInstPath}/oraInst.loc"],
+                          File["${path}/db_install_${version}.rsp"],
+                          Exec["extract ${path}/${file}_1of2.zip"],
+                          Exec["extract ${path}/${file}_2of2.zip"]],
           creates     => $oracleHome,
           timeout     => 0,
           returns     => [6,0],
@@ -287,7 +290,8 @@ define oradb::installdb( $version                 = undef,
       } else {
         exec { "install oracle database ${title}":
           command     => "/bin/sh -c 'unset DISPLAY;${path}/${file}/database/runInstaller -silent -waitforcompletion -ignoreSysPrereqs -ignorePrereq -responseFile ${path}/db_install_${version}.rsp'",
-          require     => [File ["${oraInstPath}/oraInst.loc"],File["${path}/db_install_${version}.rsp"]],
+          require     => [File ["${oraInstPath}/oraInst.loc"],
+                          File["${path}/db_install_${version}.rsp"]],
           creates     => $oracleHome,
           timeout     => 0,
           returns     => [6,0],

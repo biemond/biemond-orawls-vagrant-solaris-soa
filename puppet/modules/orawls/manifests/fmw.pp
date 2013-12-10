@@ -177,7 +177,7 @@ define orawls::fmw (
     if $::kernel == "SunOS" {
       if $fmw_product == "soa" {
         exec { "add -d64 oraparam.ini ${title}":
-          command   => "sed -e's/JRE_MEMORY_OPTIONS=\" -Xverify:none\"/JRE_MEMORY_OPTIONS=\"-d64 -Xverify:none\"/g' ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini > /tmp/fmw.tmp && mv /tmp/fmw.tmp ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini",
+          command   => "sed -e's/JRE_MEMORY_OPTIONS=\" -Xverify:none\"/JRE_MEMORY_OPTIONS=\"-d64 -Xverify:none\"/g' ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini > ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini",
           require   => [File[$last_download_check],
                         Exec[$last_extract_check]
                        ],
@@ -191,7 +191,7 @@ define orawls::fmw (
       if $fmw_product == "osb" {
 
         exec { "add -d64 oraparam.ini ${title}":
-          command   => "sed -e's/\\[Oracle\\]/\\[Oracle\\]\\\nJRE_MEMORY_OPTIONS=\"-d64\"/g' ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini > /tmp/fmw.tmp && mv /tmp/fmw.tmp ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini",
+          command   => "sed -e's/\\[Oracle\\]/\\[Oracle\\]\\\nJRE_MEMORY_OPTIONS=\"-d64\"/g' ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini > ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini",
           require   => [File[$last_download_check],
                         Exec[$last_extract_check],
                        ],

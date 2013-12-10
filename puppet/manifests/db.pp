@@ -6,6 +6,11 @@ node 'dbsol.example.com'  {
 # operating settings for Database & Middleware
 class os {
 
+  $default_params = {}
+  $host_instances = hiera('hosts', [])
+  create_resources('host',$host_instances, $default_params)
+
+
 # vagrant
 # vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
 #
@@ -59,6 +64,16 @@ class os {
 # pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
 # pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
 
+  exec { "remove localhost":
+    command => "/usr/bin/sed -e '/'127.0.0.1'/ d' /etc/hosts >/etc/hosts",
+    unless  => "/usr/bin/grep -c ${hostname} /etc/hosts",
+  }
+
+  exec { "add localhost":
+    command => "/bin/echo '127.0.0.1 localhost ${fqdn} ${hostname}' >>/etc/hosts",
+    unless  => "/usr/bin/grep -c ${hostname} /etc/hosts",
+    require => Exec["remove localhost"],
+  }
 
 
 # On Oracle Solaris 10, you are not required to make changes to the /etc/system file to 
