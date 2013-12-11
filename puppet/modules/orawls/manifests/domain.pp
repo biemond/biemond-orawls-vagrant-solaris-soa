@@ -281,7 +281,7 @@ define orawls::domain (
 
     if $::kernel == "SunOS" {
       exec { "setDebugFlagOnFalse ${domain_name} ${title}":
-        command => "sed -e's/debugFlag=\"true\"/debugFlag=\"false\"/g' ${domain_dir}/${domain_name}/bin/setDomainEnv.sh > ${domain_dir}/${domain_name}/bin/setDomainEnv.sh",
+        command => "sed -e's/debugFlag=\"true\"/debugFlag=\"false\"/g' ${domain_dir}/${domain_name}/bin/setDomainEnv.sh > /tmp/domain.tmp && mv /tmp/domain.tmp ${domain_dir}/${domain_name}/bin/setDomainEnv.sh",
         onlyif  => "/bin/grep debugFlag=\"true\" ${domain_dir}/${domain_name}/bin/setDomainEnv.sh | /usr/bin/wc -l",
         require => Exec["execwlst ${domain_name} ${title}"],
         path    => $exec_path,

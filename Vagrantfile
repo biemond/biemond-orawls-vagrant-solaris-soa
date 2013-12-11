@@ -66,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # dbsol.vm.synced_folder "../data", "/vagrant_data"
   
     dbsol.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm"     , :id, "--memory", "2048"]
+      vb.customize ["modifyvm"     , :id, "--memory", "4096"]
       vb.customize ["modifyvm"     , :id, "--name", "dbsol"]
       vb.customize ["modifyvm"     , :id, "--cpus", 1]
       vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]

@@ -36,6 +36,7 @@ wls_jdk_home_dir:         &wls_jdk_home_dir         "/usr/jdk/jdk1.7.0_45"
 wls_log_dir:              &wls_log_dir              "/data/logs"
 
 
+
 #WebLogic installation variables 
 orawls::weblogic::version:              *wls_version
 orawls::weblogic::filename:             "wls1036_generic.jar"
