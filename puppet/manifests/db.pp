@@ -40,8 +40,7 @@ class os {
                'SUNWi1cs', 'SUNWi15cs',
                'SUNWlibC','SUNWlibm','SUNWlibms',
                'SUNWsprot','SUNWpool','SUNWpoolr',
-               'SUNWtoo',
-               'SUNWxwfnt'
+               'SUNWtoo','SUNWxwfnt'
               ]
                
   package { $install:
@@ -98,43 +97,56 @@ class os {
                  Package['SUNWi1of'],
                  Package[$install],
                ],
+    unless  => "projects -l | grep -c ORADB",           
     path    => $execPath,
   }
 
   exec { "projmod max-sem-ids":
-    command => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORADB",
-    require => Exec["projadd max-shm-memory"],
-    path    => $execPath,
+    command     => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORADB",
+    subscribe   => Exec["projadd max-shm-memory"],
+    require     => Exec["projadd max-shm-memory"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "projmod max-shm-ids":
-    command => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORADB",
-    require => Exec["projmod max-sem-ids"],
-    path    => $execPath,
+    command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORADB",
+    require     => Exec["projmod max-sem-ids"],
+    subscribe   => Exec["projmod max-sem-ids"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "projmod max-sem-nsems":
-    command => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORADB",
-    require => Exec["projmod max-shm-ids"],
-    path    => $execPath,
+    command     => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORADB",
+    require     => Exec["projmod max-shm-ids"],
+    subscribe   => Exec["projmod max-shm-ids"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "projmod max-file-descriptor":
-    command => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORADB",
-    require => Exec["projmod max-sem-nsems"],
-    path    => $execPath,
+    command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORADB",
+    require     => Exec["projmod max-sem-nsems"],
+    subscribe   => Exec["projmod max-sem-nsems"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "projmod max-stack-size":
-    command => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORADB",
-    require => Exec["projmod max-file-descriptor"],
-    path    => $execPath,
+    command     => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORADB",
+    require     => Exec["projmod max-file-descriptor"],
+    subscribe   => Exec["projmod max-file-descriptor"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "usermod oracle":
-    command => "usermod -K project=ORADB oracle",
-    require => Exec["projmod max-stack-size"],
-    path    => $execPath,
+    command     => "usermod -K project=ORADB oracle",
+    require     => Exec["projmod max-stack-size"],
+    subscribe   => Exec["projmod max-stack-size"],
+    refreshonly => true, 
+    path        => $execPath,
   }
 
   exec { "ndd 1":
