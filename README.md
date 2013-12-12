@@ -36,6 +36,9 @@ FMW 11 PS6
 - ofm_soa_generic_11.1.1.7.0_disk1_1of2.zip
 - ofm_soa_generic_11.1.1.7.0_disk1_2of2.zip
 
+RCU Linux 64
+- ofm_rcu_linux_11.1.1.7.0_64_disk1_1of1.zip
+
 Using the following facts
 
 - environment => "development"
