@@ -29,10 +29,10 @@ define orawls::domain (
 
   if $::override_weblogic_domain_folder == undef {
     $domain_dir = "${middleware_home_dir}/user_projects/domains"
-    $app_dir    = "${middleware_home_dir}/user_projects/applications"  
+    $app_dir    = "${middleware_home_dir}/user_projects/applications"
   } else {
     $domain_dir = "${::override_weblogic_domain_folder}/domains"
-    $app_dir    = "${::override_weblogic_domain_folder}/applications"  
+    $app_dir    = "${::override_weblogic_domain_folder}/applications"
   }
 
   # check if the domain already exists

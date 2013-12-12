@@ -123,11 +123,11 @@ class orawls::weblogic (
                         File["${download_dir}/weblogic_silent_install.xml"]],
       }
 
-      # OPatch native lib fix for 64 solaris 
+      # OPatch native lib fix for 64 solaris
       case $::kernel {
         SunOS: {
           exec { "add -d64 oraparam.ini oracle_common":
-            command => "sed -e's/JRE_MEMORY_OPTIONS=/JRE_MEMORY_OPTIONS=\"-d64\"/g' ${middleware_home_dir}/oui/oraparam.ini > ${middleware_home_dir}/oui/oraparam.ini",
+            command => "sed -e's/JRE_MEMORY_OPTIONS=/JRE_MEMORY_OPTIONS=\"-d64\"/g' ${middleware_home_dir}/oui/oraparam.ini > /tmp/wls.tmp && mv /tmp/wls.tmp ${middleware_home_dir}/oui/oraparam.ini",
             require => Exec["install weblogic ${version}"],
             path    => $exec_path,
             user    => $os_user,

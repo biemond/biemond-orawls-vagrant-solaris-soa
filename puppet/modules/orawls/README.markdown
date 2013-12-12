@@ -1,7 +1,7 @@
 Oracle WebLogic / Fusion Middleware puppet module V2
 ====================================================
 
-Got the same options as the wls module but optimized for Hiera, totally refactored and only for Linux
+Got the same options as the wls module but optimized for Hiera, totally refactored and only for Linux and Solaris
 
 For full hiera examples, see the usages below this page
 
@@ -9,10 +9,16 @@ created by Edwin Biemond  email biemond at gmail dot com
 [biemond.blogspot.com](http://biemond.blogspot.com)    
 [Github homepage](https://github.com/biemond/biemond-orawls)  
 
-Should work for all Linux versions like RedHat, CentOS, Ubuntu, Debian, Suse SLES or OracleLinux  
+Should work for all Linux,Solaris versions like RedHat, CentOS, Ubuntu, Debian, Suse SLES, OracleLinux, Solaris 10 sparc and x86  
 
-Reference implementation, the vagrant test case for full working WebLogic 12.1.2 example  
+Reference implementation, the vagrant test case for full working WebLogic 10.3.6 cluster example  
 https://github.com/biemond/biemond-orawls-vagrant  
+
+Reference Solaris implementation, the vagrant test case for full working WebLogic 12.1.2 cluster example  
+https://github.com/biemond/biemond-orawls-vagrant-solaris  
+
+Reference Oracle SOA Suite, the vagrant test case for full working WebLogic 10.3.6 SOA Suite + OSB cluster example  
+https://github.com/biemond/vagrant-soasuite or https://github.com/biemond/biemond-orawls-vagrant-solaris-soa
 
 
 Orawls WebLogic Features
@@ -46,6 +52,13 @@ all templates creates a WebLogic domain, logs the domain creation output
 - domain 'osb_soa_bpm' -> OSB + SOA Suite + BAM + BPM + JRF + EM + OWSM 
 - domain 'soa'         -> SOA Suite + BAM + JRF + EM + OWSM 
 - domain 'soa_bpm'     -> SOA Suite + BAM + BPM + JRF + EM + OWSM 
+
+
+orawls::utils::wlstbulk is for now disabled so you can also use this in puppet Enterprise 3.0  
+requirements
+- needs puppet version > 3.2 ( make use of iteration and lambda expressions )
+- need to set --parser future ( puppet agent )
+- to use this you need uncomment this orawls::utils::wlstbulk define and enable future parser
 
 
 Override the default Oracle operating system user
@@ -1297,6 +1310,8 @@ execute any WLST script you want( bulk mode )
 requirements
 - need puppet version > 3.2 ( make use of iteration and lambda expressions
 - need to set --parser future ( puppet agent )
+
+to use this you need uncomment this orawls::utils::wlstbulk define and enable future parser
 
 use hiera_array, this will search for this entry in all hiera data files
 

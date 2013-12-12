@@ -213,13 +213,20 @@ class db12c {
             require      => Oradb::Installdb['12.1_solaris-x64'],
    }
 
+   exec { "replace localhost listener.ora":
+        command     => "/bin/sed -e's/localhost/0.0.0.0/g' /oracle/product/12.1/db/network/admin/listener.ora > /tmp/ora.tmp && mv /tmp/ora.tmp /oracle/product/12.1/db/network/admin/listener.ora" ,
+        require     => Oradb::Net['config net8'],
+        onlyif      => "/bin/grep -c localhost /oracle/product/12.1/db/network/admin/listener.ora",
+   }
+
+
    oradb::listener{'start listener':
             oracleBase   => '/oracle',
             oracleHome   => '/oracle/product/12.1/db',
             user         => 'oracle',
             group        => 'dba',
             action       => 'start',  
-            require      => Oradb::Net['config net8'],
+            require      => Exec["replace localhost listener.ora"],
    }
 
    oradb::database{ 'testDb': 

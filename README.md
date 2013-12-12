@@ -6,7 +6,7 @@ optimized for linux,solaris and the use of Hiera
 
 creates a patched 10.3.6 SOA Suite WebLogic cluster ( adminsol,nodesol1 , nodesol2 )
 creates an Oracle Database 12.1 ( dbsol )
-creates an Linux RCU Host ( rcusol )
+creates an Linux RCU Host ( rcunod )
 
 site.pp is located here:  
 https://github.com/biemond/biemond-orawls-vagrant-solaris-soa/blob/master/puppet/manifests/site.pp  

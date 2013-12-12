@@ -54,16 +54,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #dbsol.vm.box_url = "/Users/edwin/Downloads/solaris10-x86_64.box"
 
     dbsol.vm.hostname = "dbsol.example.com"
-    # dbsol.vm.network :forwarded_port, guest: 80, host: 8888 ,auto_correct: true
-    # dbsol.vm.network :forwarded_port, guest: 7001, host: 7001, auto_correct: true
-  
     dbsol.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
-  
     dbsol.vm.network :private_network, ip: "10.10.10.5"
-  
-    # dbsol.vm.network :public_network
-    # dbsol.ssh.forward_agent = true
-    # dbsol.vm.synced_folder "../data", "/vagrant_data"
   
     dbsol.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm"     , :id, "--memory", "4096"]
@@ -173,5 +165,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end
 
+  config.vm.define "rcunod" do |rcunod|
+
+    rcunod.vm.box = "centos-6.4-x86_64"
+    rcunod.vm.box_url = "https://dl.dropboxusercontent.com/s/yg9ceak6zd86wk7/centos-6.4-x86_64.box"
+  
+    rcunod.vm.hostname = "rcunod.example.com"
+  
+    rcunod.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
+  
+    rcunod.vm.network :private_network, ip: "10.10.10.15"
+  
+    rcunod.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024"]
+      vb.customize ["modifyvm", :id, "--name", "rcunod"]
+    end
+  
+    rcunod.vm.provision :shell, :inline => "ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"
+    
+    rcunod.vm.provision :puppet do |puppet|
+      puppet.manifests_path    = "puppet/manifests"
+      puppet.module_path       = "puppet/modules"
+      puppet.manifest_file     = "rcu.pp"
+      puppet.options           = "--verbose --hiera_config /vagrant/puppet/hiera.yaml"
+  
+      puppet.facter = {
+        "environment"                     => "development",
+        "vm_type"                         => "vagrant",
+        "env_app1"                        => "application_One",
+        "env_app2"                        => "application_Two",
+      }
+    end
+  end
 
 end
