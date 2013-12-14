@@ -52,9 +52,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dbsol.vm.network :private_network, ip: "10.10.10.5"
   
     dbsol.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm"     , :id, "--memory", "4096"]
+      vb.customize ["modifyvm"     , :id, "--memory", "3548"]
       vb.customize ["modifyvm"     , :id, "--name", "dbsol"]
-      vb.customize ["modifyvm"     , :id, "--cpus", 1]
+      vb.customize ["modifyvm"     , :id, "--cpus", 2]
       #vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
     end
 
@@ -158,7 +158,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
     rcunod.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
   
-    rcunod.vm.network :private_network, ip: "10.10.10.15"
+    #rcunod.vm.network :private_network, ip: "10.10.10.15"
   
     rcunod.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm", :id, "--memory", "1024"]

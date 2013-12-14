@@ -98,6 +98,7 @@ class rcu {
                  reposPassword    => 'Welcome01',
                  tempTablespace   => 'TEMP',
                  puppetDownloadMntPoint => '/vagrant',
+                 remoteFile       => false,
                  logoutput        => true,
   }
 

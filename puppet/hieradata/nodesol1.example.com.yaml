@@ -8,7 +8,7 @@ logoutput:                     &logoutput                     true
 
 
 # when you have just one domain on a server
-domain_name:                "Wls1212"
+domain_name:                "soa_basedomain"
 domain_adminserver:         "AdminServer"
 domain_adminserver_address: "10.10.10.10"
 domain_adminserver_port:    7001

@@ -188,6 +188,7 @@ class db12c {
             user                   => 'oracle',
             group                  => 'dba',
             downloadDir            => '/install',
+            remoteFile             => false,
             puppetDownloadMntPoint => "/vagrant",  
     }
 
