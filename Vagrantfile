@@ -8,8 +8,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "adminsol" , primary: true do |adminsol|
     adminsol.vm.box = "solaris10-x86_64"
-    adminsol.vm.box_url = "https://dl.dropboxusercontent.com/s/an5bthwroh1i8k5/solaris10-x86_64.box"
-    #adminsol.vm.box_url = "/Users/edwin/Downloads/solaris10-x86_64.box"
+    #adminsol.vm.box_url = "https://dl.dropboxusercontent.com/s/an5bthwroh1i8k5/solaris10-x86_64.box"
+    adminsol.vm.box_url = "/Users/edwin/Downloads/solaris10-x86_64.box"
 
     adminsol.vm.hostname = "adminsol.example.com"
     adminsol.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
@@ -17,10 +17,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   
     adminsol.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "2048"]
+      vb.customize ["modifyvm", :id, "--memory", "2548"]
       vb.customize ["modifyvm", :id, "--name", "adminsol"]
-      vb.customize ["modifyvm", :id, "--cpus", 1]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
+      vb.customize ["modifyvm", :id, "--cpus", 2]
+      #vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
     end
   
     adminsol.vm.provision :shell, :inline => "ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"
@@ -55,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.customize ["modifyvm"     , :id, "--memory", "4096"]
       vb.customize ["modifyvm"     , :id, "--name", "dbsol"]
       vb.customize ["modifyvm"     , :id, "--cpus", 1]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
+      #vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
     end
 
   
@@ -89,9 +89,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node1.vm.network :private_network, ip: "10.10.10.100"
   
     node1.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1532"]
+      vb.customize ["modifyvm", :id, "--memory", "2548"]
       vb.customize ["modifyvm", :id, "--name", "nodesol1"]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
+      vb.customize ["modifyvm", :id, "--cpus", 2]
+      #vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
     end
   
     node1.vm.provision :shell, :inline => "echo '10.10.10.100 nodesol1.example.com nodesol1' >> /etc/hosts ; ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"
@@ -123,9 +124,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node2.vm.network :private_network, ip: "10.10.10.200", auto_correct: true
   
     node2.vm.provider :virtualbox do |vb|
-      vb.customize ["modifyvm", :id, "--memory", "1532"]
+      vb.customize ["modifyvm", :id, "--memory", "2548"]
       vb.customize ["modifyvm", :id, "--name", "nodesol2"]
-      vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
+      vb.customize ["modifyvm", :id, "--cpus", 2]
+      #vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
     end
   
     node2.vm.provision :shell, :inline => "echo '10.10.10.200 nodesol2.example.com nodesol2' >> /etc/hosts ; ln -sf /vagrant/puppet/hiera.yaml /etc/puppet/hiera.yaml"

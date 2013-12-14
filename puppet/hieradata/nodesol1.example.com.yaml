@@ -25,7 +25,6 @@ domain_instances:
 # copy domains to other nodes
 copy_instances:
   'wlsDomain':
-
      log_output:              *logoutput
 
 

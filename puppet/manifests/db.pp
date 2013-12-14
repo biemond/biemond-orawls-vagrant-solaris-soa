@@ -10,57 +10,44 @@ class os {
   $host_instances = hiera('hosts', [])
   create_resources('host',$host_instances, $default_params)
 
-# vagrant
-# vb.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', 0, '--device', 1, '--type', 'dvddrive', '--medium',  "/Users/edwin/Downloads/V36435-01.iso"]
-#
-# mount cdrom
-# ls -al /dev/sr* |awk '{print "/" $11}'
-# mkdir -p /cdrom/unnamed_cdrom
-# mount -F hsfs -o ro /dev/dsk/c0t1d0s2 /cdrom/unnamed_cdrom
-#
+  # exec { "create /cdrom/unnamed_cdrom":
+  #   command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
+  #   creates => "/cdrom/unnamed_cdrom",
+  # }
 
-  exec { "create /cdrom/unnamed_cdrom":
-    command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
-    creates => "/cdrom/unnamed_cdrom",
-  }
+  # mount { "/cdrom/unnamed_cdrom":
+  #   device   => "/dev/dsk/c0t1d0s2",
+  #   fstype   => "hsfs",
+  #   ensure   => "mounted",
+  #   options  => "ro",
+  #   atboot   => true,
+  #   remounts => false,
+  #   require  => Exec["create /cdrom/unnamed_cdrom"],
+  # }
 
-  mount { "/cdrom/unnamed_cdrom":
-    device   => "/dev/dsk/c0t1d0s2",
-    fstype   => "hsfs",
-    ensure   => "mounted",
-    options  => "ro",
-    atboot   => true,
-    remounts => false,
-    require  => Exec["create /cdrom/unnamed_cdrom"],
-  }
-
-  $install = [ 
-               'SUNWarc','SUNWbtool','SUNWcsl',
-               'SUNWdtrc','SUNWeu8os','SUNWhea',
-               'SUNWi1cs', 'SUNWi15cs',
-               'SUNWlibC','SUNWlibm','SUNWlibms',
-               'SUNWsprot','SUNWpool','SUNWpoolr',
-               'SUNWtoo','SUNWxwfnt'
-              ]
+  # $install = [ 
+  #              'SUNWarc','SUNWbtool','SUNWcsl',
+  #              'SUNWdtrc','SUNWeu8os','SUNWhea',
+  #              'SUNWi1cs', 'SUNWi15cs',
+  #              'SUNWlibC','SUNWlibm','SUNWlibms',
+  #              'SUNWsprot','SUNWpool','SUNWpoolr',
+  #              'SUNWtoo','SUNWxwfnt'
+  #             ]
                
-  package { $install:
-    ensure    => present,
-    adminfile => "/vagrant/pkgadd_response",
-    source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
-    require   => [Exec["create /cdrom/unnamed_cdrom"],
-                  Mount["/cdrom/unnamed_cdrom"]
-                 ],  
-  }
-  package { 'SUNWi1of':
-    ensure    => present,
-    adminfile => "/vagrant/pkgadd_response",
-    source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
-    require   => Package[$install],  
-  }
-
-
-# pkginfo -i SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
-# pkgadd -d /cdrom/unnamed_cdrom/Solaris_10/Product/ -r response -a response SUNWarc SUNWbtool SUNWhea SUNWlibC SUNWlibm SUNWlibms SUNWsprot SUNWtoo SUNWi1of SUNWi1cs SUNWi15cs SUNWxwfnt SUNWcsl SUNWdtrc
+  # package { $install:
+  #   ensure    => present,
+  #   adminfile => "/vagrant/pkgadd_response",
+  #   source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+  #   require   => [Exec["create /cdrom/unnamed_cdrom"],
+  #                 Mount["/cdrom/unnamed_cdrom"]
+  #                ],  
+  # }
+  # package { 'SUNWi1of':
+  #   ensure    => present,
+  #   adminfile => "/vagrant/pkgadd_response",
+  #   source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+  #   require   => Package[$install],  
+  # }
 
   exec { "remove localhost":
     command => "/usr/bin/sed -e '/'127.0.0.1'/ d' /etc/hosts > /tmp/hosts.tmp && mv /tmp/hosts.tmp /etc/hosts",
@@ -94,8 +81,8 @@ class os {
   exec { "projadd max-shm-memory":
     command => "projadd -p 102  -c 'ORADB' -U oracle -G dba  -K 'project.max-shm-memory=(privileged,4G,deny)' ORADB",
     require => [ User["oracle"],
-                 Package['SUNWi1of'],
-                 Package[$install],
+#                 Package['SUNWi1of'],
+#                 Package[$install],
                ],
     unless  => "projects -l | grep -c ORADB",           
     path    => $execPath,

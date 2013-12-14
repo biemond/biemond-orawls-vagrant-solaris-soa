@@ -8,7 +8,7 @@
 node 'nodesol1.example.com', 'nodesol2.example.com' {
   
   include os, ssh
-  include java, orawls::weblogic, opatch, orautils, copydomain, nodemanager
+  include java, orawls::weblogic, bsu, fmw, opatch, orautils, copydomain, nodemanager
 
   Class['java'] -> Class['orawls::weblogic'] 
 }
@@ -23,44 +23,44 @@ class os {
   $host_instances = hiera('hosts', [])
   create_resources('host',$host_instances, $default_params)
 
-  exec { "create /cdrom/unnamed_cdrom":
-    command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
-    creates => "/cdrom/unnamed_cdrom",
-  }
+  # exec { "create /cdrom/unnamed_cdrom":
+  #   command => "/usr/bin/mkdir -p /cdrom/unnamed_cdrom",
+  #   creates => "/cdrom/unnamed_cdrom",
+  # }
 
-  mount { "/cdrom/unnamed_cdrom":
-    device   => "/dev/dsk/c0t1d0s2",
-    fstype   => "hsfs",
-    ensure   => "mounted",
-    options  => "ro",
-    atboot   => true,
-    remounts => false,
-    require  => Exec["create /cdrom/unnamed_cdrom"],
-  }
+  # mount { "/cdrom/unnamed_cdrom":
+  #   device   => "/dev/dsk/c0t1d0s2",
+  #   fstype   => "hsfs",
+  #   ensure   => "mounted",
+  #   options  => "ro",
+  #   atboot   => true,
+  #   remounts => false,
+  #   require  => Exec["create /cdrom/unnamed_cdrom"],
+  # }
 
-  $install = [ 
-               'SUNWarc','SUNWbtool','SUNWcsl',
-               'SUNWdtrc','SUNWeu8os','SUNWhea',
-               'SUNWi1cs', 'SUNWi15cs',
-               'SUNWlibC','SUNWlibm','SUNWlibms',
-               'SUNWsprot','SUNWpool','SUNWpoolr',
-               'SUNWtoo','SUNWxwfnt'
-              ]
+  # $install = [ 
+  #              'SUNWarc','SUNWbtool','SUNWcsl',
+  #              'SUNWdtrc','SUNWeu8os','SUNWhea',
+  #              'SUNWi1cs', 'SUNWi15cs',
+  #              'SUNWlibC','SUNWlibm','SUNWlibms',
+  #              'SUNWsprot','SUNWpool','SUNWpoolr',
+  #              'SUNWtoo','SUNWxwfnt'
+  #             ]
                
-  package { $install:
-    ensure    => present,
-    adminfile => "/vagrant/pkgadd_response",
-    source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
-    require   => [Exec["create /cdrom/unnamed_cdrom"],
-                  Mount["/cdrom/unnamed_cdrom"]
-                 ],  
-  }
-  package { 'SUNWi1of':
-    ensure    => present,
-    adminfile => "/vagrant/pkgadd_response",
-    source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
-    require   => Package[$install],  
-  }
+  # package { $install:
+  #   ensure    => present,
+  #   adminfile => "/vagrant/pkgadd_response",
+  #   source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+  #   require   => [Exec["create /cdrom/unnamed_cdrom"],
+  #                 Mount["/cdrom/unnamed_cdrom"]
+  #                ],  
+  # }
+  # package { 'SUNWi1of':
+  #   ensure    => present,
+  #   adminfile => "/vagrant/pkgadd_response",
+  #   source    => "/cdrom/unnamed_cdrom/Solaris_10/Product/",
+  #   require   => Package[$install],  
+  # }
 
   group { 'dba' :
     ensure      => present,
@@ -81,25 +81,41 @@ class os {
   $execPath     = "/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
 
   exec { "projadd max-shm-memory":
-    command => "projadd -p 102  -c 'ORADB' -U oracle -G dba  -K 'project.max-shm-memory=(privileged,4G,deny)' ORADB",
+    command => "projadd -p 102  -c 'ORAWLS' -U oracle -G dba  -K 'project.max-shm-memory=(privileged,2G,deny)' ORAWLS",
     require => [ User["oracle"],
-                 Package['SUNWi1of'],
-                 Package[$install],
+#                 Package['SUNWi1of'],
+#                 Package[$install],
                ],
-    unless  => "projects -l | grep -c ORADB",           
+    unless  => "projects -l | grep -c ORAWLS",           
     path    => $execPath,
   }
 
-  exec { "projmod max-sem-ids":
-    command     => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORADB",
-    subscribe   => Exec["projadd max-shm-memory"],
+  exec { "projmod default max-shm-memory":
+    command     => "projmod -s -K 'project.max-shm-memory=(privileged,2G,deny)' default",
     require     => Exec["projadd max-shm-memory"],
+    subscribe   => Exec["projadd max-shm-memory"],
+    refreshonly => true, 
+    path        => $execPath,
+  }  
+
+  exec { "projmod default max-file-descriptor":
+    command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' default",
+    require     => Exec["projmod default max-shm-memory"],
+    subscribe   => Exec["projmod default max-shm-memory"],
+    refreshonly => true, 
+    path        => $execPath,
+  }
+
+  exec { "projmod max-sem-ids":
+    command     => "projmod -s -K 'project.max-sem-ids=(privileged,100,deny)' ORAWLS",
+    subscribe   => Exec["projmod default max-file-descriptor"],
+    require     => Exec["projmod default max-file-descriptor"],
     refreshonly => true, 
     path        => $execPath,
   }
 
   exec { "projmod max-shm-ids":
-    command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORADB",
+    command     => "projmod -s -K 'project.max-shm-ids=(privileged,100,deny)' ORAWLS",
     require     => Exec["projmod max-sem-ids"],
     subscribe   => Exec["projmod max-sem-ids"],
     refreshonly => true, 
@@ -107,7 +123,7 @@ class os {
   }
 
   exec { "projmod max-sem-nsems":
-    command     => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORADB",
+    command     => "projmod -s -K 'process.max-sem-nsems=(privileged,256,deny)' ORAWLS",
     require     => Exec["projmod max-shm-ids"],
     subscribe   => Exec["projmod max-shm-ids"],
     refreshonly => true, 
@@ -115,7 +131,7 @@ class os {
   }
 
   exec { "projmod max-file-descriptor":
-    command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORADB",
+    command     => "projmod -s -K 'process.max-file-descriptor=(basic,65536,deny)' ORAWLS",
     require     => Exec["projmod max-sem-nsems"],
     subscribe   => Exec["projmod max-sem-nsems"],
     refreshonly => true, 
@@ -123,7 +139,7 @@ class os {
   }
 
   exec { "projmod max-stack-size":
-    command     => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORADB",
+    command     => "projmod -s -K 'process.max-stack-size=(privileged,32MB,deny)' ORAWLS",
     require     => Exec["projmod max-file-descriptor"],
     subscribe   => Exec["projmod max-file-descriptor"],
     refreshonly => true, 
@@ -131,7 +147,7 @@ class os {
   }
 
   exec { "usermod oracle":
-    command     => "usermod -K project=ORADB oracle",
+    command     => "usermod -K project=ORAWLS oracle",
     require     => Exec["projmod max-stack-size"],
     subscribe   => Exec["projmod max-stack-size"],
     refreshonly => true, 
@@ -231,8 +247,26 @@ class java {
 
 }
 
+class bsu{
+  require  os,ssh,java, orawls::weblogic
+
+  notify { 'class bsu':} 
+  $default_params = {}
+  $bsu_instances = hiera('bsu_instances', [])
+  create_resources('orawls::bsu',$bsu_instances, $default_params)
+}
+
+class fmw{
+  require bsu
+
+  notify { 'class fmw':} 
+  $default_params = {}
+  $fmw_installations = hiera('fmw_installations', [])
+  create_resources('orawls::fmw',$fmw_installations, $default_params)
+}
+
 class opatch{
-  require orawls::weblogic
+  require fmw,bsu,orawls::weblogic
 
   notice 'class opatch'
   $default_params = {}
@@ -242,7 +276,7 @@ class opatch{
 
 
 class copydomain {
-  require orawls::weblogic, opatch
+  require orawls::weblogic,fmw_osb,fmw_soa, opatch
 
 
   notify { 'class copydomain':} 

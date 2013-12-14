@@ -51,6 +51,7 @@ orawls::weblogic::os_user:              *wls_os_user
 orawls::weblogic::os_group:             *wls_os_group
 orawls::weblogic::download_dir:         *wls_download_dir
 orawls::weblogic::source:               *wls_source
+orawls::weblogic::remote_file:          false
 
 # patches for WebLogic 10.3.6
 bsu_instances:
@@ -58,6 +59,7 @@ bsu_instances:
     patch_id:                "BYJ1"
     patch_file:              "p17071663_1036_Generic.zip"
     log_output:              true
+    remote_file:             false
 
 # FMW installation on top of WebLogic 10.3.6
 fmw_installations:
@@ -65,17 +67,20 @@ fmw_installations:
     fmw_product:             "osb"
     fmw_file1:               "ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip"
     log_output:              true
+    remote_file:             false
   'soaPS6':
     fmw_product:             "soa"
     fmw_file1:               "ofm_soa_generic_11.1.1.7.0_disk1_1of2.zip"
     fmw_file2:               "ofm_soa_generic_11.1.1.7.0_disk1_2of2.zip"
     log_output:              true
+    remote_file:             false
 
 opatch_instances:
-#  '16175470':
-#     oracle_product_home_dir:  "/opt/oracle/middleware12c"
-#     patch_id:                 "16175470"
-#     patch_file:               "p16175470_121200_Generic.zip"
+  '17014142':
+     oracle_product_home_dir:  "/opt/oracle/middleware11g/Oracle_SOA1"
+     patch_id:                 "17014142"
+     patch_file:               "p17014142_111170_Generic.zip"
+     remote_file:              false
 
 # handy WebLogic scripts in /opt/scripts/wls
 orautils::osOracleHomeParam:      *wls_oracle_base_home_dir

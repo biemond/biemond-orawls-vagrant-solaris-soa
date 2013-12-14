@@ -157,7 +157,9 @@ define oradb::installdb( $version                 = undef,
         }
         exec { "extract ${path}/${file}_2of2.zip":
           command     => "unzip -o ${path}/${file}_2of2.zip -d ${path}/${file}",
-          require     => [ File["${path}/${file}_2of2.zip"], Exec["extract ${path}/${file}_1of2.zip"], ],
+          require     => [ File["${path}/${file}_2of2.zip"], 
+                           Exec["extract ${path}/${file}_1of2.zip"], 
+                         ],
           creates     => "${path}/${file}/database/stage/Components/oracle.rdbms/12.1.0.1.0/1/DataFiles/filegroup19.6.1.jar",
         }
       }
