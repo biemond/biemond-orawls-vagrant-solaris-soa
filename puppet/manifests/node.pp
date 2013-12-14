@@ -276,7 +276,7 @@ class opatch{
 
 
 class copydomain {
-  require orawls::weblogic,fmw_osb,fmw_soa, opatch
+  require orawls::weblogic,fmw, opatch
 
 
   notify { 'class copydomain':} 
