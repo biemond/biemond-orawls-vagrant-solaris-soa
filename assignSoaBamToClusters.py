@@ -1,4 +1,6 @@
 
+#http://docs.oracle.com/cd/E28280_01/core.1111/e12036/target_appendix_soa.htm
+
 WLHOME='/opt/oracle/middleware11g/wlserver_10.3'
 DOMAIN_PATH='/opt/oracle/middleware11g/user_projects/domains/soa_basedomain'
 DOMAIN='soa_basedomain'

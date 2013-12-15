@@ -6,6 +6,7 @@ bring the domain down
 /opt/oracle/middleware11g/user_projects/domains/soa_basedomain/bin/stopWebLogic.sh
 
 /opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /vagrant/assignSoaBamToClusters.py
+/opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /vagrant/soa-bpm-createUDD.py
 
 
 /opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /opt/oracle/middleware11g/Oracle_SOA1/bin/soa-createUDD.py --domain_home /opt/oracle/middleware11g/user_projects/domains/soa_basedomain --bamcluster BamCluster --soacluster SoaCluster --create_jms true
@@ -15,7 +16,10 @@ bring the domain down
 
 todo
 
+persistence store on all jmservers
+transactions on all servers
 
-persistence store
+BPMJMSModule    SOA_Cluster
+PS6SOAJMSModule SOA_Cluster
+AGJMSModule     SOA_Cluster
 
-ssl off on managed servers

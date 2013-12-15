@@ -83,7 +83,7 @@ managed_servers_instances:
       wlsServer1_node1:
          weblogic_object_name: "SoaServer1"
          params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer1.out -Dweblogic.Stderr=/data/logs/wlsServer1_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol1.example.com'"
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer1.out -Dweblogic.Stderr=/data/logs/wlsServer1_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol1.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'"
             - "wlsServerName    = 'SoaServer1'"
             - "machineName      = 'Node1'"
             - "listenAddress    = 8101"
@@ -91,7 +91,7 @@ managed_servers_instances:
       wlsServer2_node2:
          weblogic_object_name: "SoaServer2"
          params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer2.out -Dweblogic.Stderr=/data/logs/wlsServer2_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol2.example.com'"
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer2.out -Dweblogic.Stderr=/data/logs/wlsServer2_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol2.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'"
             - "wlsServerName    = 'SoaServer2'"
             - "machineName      = 'Node2'"
             - "listenAddress    = 8101"
