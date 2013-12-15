@@ -12,6 +12,7 @@ node 'adminsol.example.com' {
   include opatch
   include domains,nodemanager,startwls,userconfig
   include machines,managed_servers,clusters
+  include fmw_cluster
   include pack_domain
 
   Class['java'] -> Class['orawls::weblogic']
@@ -354,8 +355,17 @@ class clusters{
 
 }
 
-class pack_domain{
+class fmw_cluster{
   require clusters
+
+  notify { 'class fmw_cluster':} 
+  $default_params = {}
+  $fmw_cluster_instances = hiera('fmw_cluster_instances', $default_params)
+  create_resources('orawls::utils::fmwcluster',$fmw_cluster_instances, $default_params)
+}
+
+class pack_domain{
+  require fmw_cluster
 
   notify { 'class pack_domain':} 
   $default_params = {}

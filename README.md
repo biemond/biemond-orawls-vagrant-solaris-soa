@@ -8,6 +8,19 @@ creates a patched 10.3.6 SOA Suite WebLogic cluster ( adminsol, nodesol1 , nodes
 creates an Oracle Database 12.1 ( dbsol )
 creates an Linux RCU Host ( rcunod )
 
+Tested with 
+- vagrant 1.35
+- virtualbox 4.3.5
+
+follow these steps
+- download all the software
+- vagrant up dbsol
+- vagrant up rcunod ( just for installing the RCU Soa Suite)
+- vagrant destroy rcunod
+- vagrant up adminsol
+- vagrant up nodesol1
+- vagrant up nodesol2
+
 site.pp is located here:  
 https://github.com/biemond/biemond-orawls-vagrant-solaris-soa/blob/master/puppet/manifests/site.pp  
 

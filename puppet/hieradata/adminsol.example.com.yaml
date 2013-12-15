@@ -27,10 +27,19 @@ domain_instances:
      repository_prefix:        "DEV"
      repository_password:      "Welcome01"
 
+# fmw cluster 
+fmw_cluster_instances:
+  'soaCluster':
+     domain_dir:           "/opt/oracle/middleware11g/user_projects/domains/soa_basedomain"
+     soa_cluster_name:     "SoaCluster"
+     bam_cluster_name:     "BamCluster"
+     # osb_cluster_name:     "OsbCluster"
+     log_output:           *logoutput
+
 # pack domains
 pack_domain_instances:
   'wlsDomain':
-     log_output:               *logoutput
+     log_output:           *logoutput
 
 
 # create and startup the nodemanager
@@ -80,6 +89,8 @@ managed_servers_instances:
          log_output:           *logoutput
          weblogic_type:        "server"
          script:               'createServer.py'
+         params:
+            - "nodeMgrLogDir    = '/data/logs'"
       wlsServer1_node1:
          weblogic_object_name: "SoaServer1"
          params:
@@ -87,7 +98,6 @@ managed_servers_instances:
             - "wlsServerName    = 'SoaServer1'"
             - "machineName      = 'Node1'"
             - "listenAddress    = 8101"
-            - "nodeMgrLogDir    = '/data/logs'"
       wlsServer2_node2:
          weblogic_object_name: "SoaServer2"
          params:
@@ -95,7 +105,6 @@ managed_servers_instances:
             - "wlsServerName    = 'SoaServer2'"
             - "machineName      = 'Node2'"
             - "listenAddress    = 8101"
-            - "nodeMgrLogDir    = '/data/logs'"
       wlsServer3_node1:
          weblogic_object_name: "BamServer1"
          params:
@@ -103,7 +112,6 @@ managed_servers_instances:
             - "wlsServerName    = 'BamServer1'"
             - "machineName      = 'Node1'"
             - "listenAddress    = 8102"
-            - "nodeMgrLogDir    = '/data/logs'"
       wlsServer4_node2:
          weblogic_object_name: "BamServer2"
          params:
@@ -111,7 +119,6 @@ managed_servers_instances:
             - "wlsServerName    = 'BamServer2'"
             - "machineName      = 'Node2'"
             - "listenAddress    = 8102"
-            - "nodeMgrLogDir    = '/data/logs'"
 
 
 # create cluster and assign the managed servers

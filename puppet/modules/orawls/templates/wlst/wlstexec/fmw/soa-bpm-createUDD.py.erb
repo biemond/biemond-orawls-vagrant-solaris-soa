@@ -2,14 +2,11 @@ import sys
 import getopt
 import string
 
+WLHOME='<%= @weblogic_home_dir %>'
+DOMAIN_PATH='<%= @domain_dir %>'
 
-WLHOME='/opt/oracle/middleware11g/wlserver_10.3'
-DOMAIN_PATH='/opt/oracle/middleware11g/user_projects/domains/soa_basedomain'
-DOMAIN='soa_basedomain'
-
-soacluster = 'SoaCluster'
-Admin      = 'AdminServer'
-
+soacluster = '<%= @soa_cluster_name %>'
+Admin      = '<%= @adminserver_name %>'
 
 def createJMSServers(cluster, track, currentServerCnt):
     print ' '
@@ -55,6 +52,7 @@ def createJMSServers(cluster, track, currentServerCnt):
 
 readDomain(DOMAIN_PATH)
 
+cd('/')
 delete('BPMJMSModule'   ,'JMSSystemResource')
 #delete('BPMJMSServer'   ,'JMSServer')
 
@@ -160,7 +158,10 @@ cd('TransactionParams/NO_NAME_0')
 cmo.setXAConnectionFactoryEnabled(true)
 
 
+cd('/')
 delete('AGJMSModule'    ,'JMSSystemResource')
+dumpStack()
+
 #delete('AGJMSServer'    ,'JMSServer')
 createJMSServers(soacluster, 'ag', 1)
 
@@ -214,7 +215,10 @@ create('TransactionParams', 'TransactionParams')
 cd('TransactionParams/NO_NAME_0')
 cmo.setXAConnectionFactoryEnabled(true)
 
+cd('/')
 delete('PS6SOAJMSModule','JMSSystemResource')
+dumpStack()
+
 #delete('PS6SOAJMSServer','JMSServer')
 createJMSServers(soacluster, 'ps6soa', 1)
 
