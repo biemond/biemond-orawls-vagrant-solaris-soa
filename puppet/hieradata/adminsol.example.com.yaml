@@ -20,7 +20,7 @@ domain_user_key_file:       "/export/home/oracle/oracle-soa_basedomain-WebLogicK
 # create a standard domain
 domain_instances:
   'wlsDomain':
-     domain_template:          "osb_soa_bpm"
+     domain_template:          "soa_bpm"
      development_mode:         false
      log_output:               *logoutput
      repository_database_url:  "jdbc:oracle:thin:@dbsol.example.com:1521:test.oracle.com"
@@ -72,4 +72,66 @@ machines_instances:
      params:
         - "machineName      = 'Node2'"
         - "machineDnsName   = '10.10.10.200'"
+
+# create 2 managed servers and assign them to the machines
+managed_servers_instances:
+   - clusterOne:
+      global_parameters:
+         log_output:           *logoutput
+         weblogic_type:        "server"
+         script:               'createServer.py'
+      wlsServer1_node1:
+         weblogic_object_name: "SoaServer1"
+         params:
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer1.out -Dweblogic.Stderr=/data/logs/wlsServer1_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol1.example.com'"
+            - "wlsServerName    = 'SoaServer1'"
+            - "machineName      = 'Node1'"
+            - "listenAddress    = 8101"
+            - "nodeMgrLogDir    = '/data/logs'"
+      wlsServer2_node2:
+         weblogic_object_name: "SoaServer2"
+         params:
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer2.out -Dweblogic.Stderr=/data/logs/wlsServer2_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol2.example.com'"
+            - "wlsServerName    = 'SoaServer2'"
+            - "machineName      = 'Node2'"
+            - "listenAddress    = 8101"
+            - "nodeMgrLogDir    = '/data/logs'"
+      wlsServer3_node1:
+         weblogic_object_name: "BamServer1"
+         params:
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer1.out -Dweblogic.Stderr=/data/logs/wlsServer1_err.out'"
+            - "wlsServerName    = 'BamServer1'"
+            - "machineName      = 'Node1'"
+            - "listenAddress    = 8102"
+            - "nodeMgrLogDir    = '/data/logs'"
+      wlsServer4_node2:
+         weblogic_object_name: "BamServer2"
+         params:
+            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/wlsServer2.out -Dweblogic.Stderr=/data/logs/wlsServer2_err.out'"
+            - "wlsServerName    = 'BamServer2'"
+            - "machineName      = 'Node2'"
+            - "listenAddress    = 8102"
+            - "nodeMgrLogDir    = '/data/logs'"
+
+
+# create cluster and assign the managed servers
+cluster_instances:
+   - clusterOne:
+      cluster_web:
+         weblogic_object_name: "SoaCluster"
+         log_output:           *logoutput
+         weblogic_type:        "cluster"
+         script:               'createCluster.py'
+         params:
+            - "clusterName      = 'SoaCluster'"
+            - "clusterNodes     = 'SoaServer1,SoaServer2'"
+      cluster_web2:
+         weblogic_object_name: "BamCluster"
+         log_output:           *logoutput
+         weblogic_type:        "cluster"
+         script:               'createCluster.py'
+         params:
+            - "clusterName      = 'BamCluster'"
+            - "clusterNodes     = 'BamServer2,BamServer1'"
+
 

@@ -63,11 +63,11 @@ bsu_instances:
 
 # FMW installation on top of WebLogic 10.3.6
 fmw_installations:
-  'osbPS6':
-    fmw_product:             "osb"
-    fmw_file1:               "ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip"
-    log_output:              true
-    remote_file:             false
+  # 'osbPS6':
+  #   fmw_product:             "osb"
+  #   fmw_file1:               "ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip"
+  #   log_output:              true
+  #   remote_file:             false
   'soaPS6':
     fmw_product:             "soa"
     fmw_file1:               "ofm_soa_generic_11.1.1.7.0_disk1_1of2.zip"
@@ -85,7 +85,7 @@ opatch_instances:
 # handy WebLogic scripts in /opt/scripts/wls
 orautils::osOracleHomeParam:      *wls_oracle_base_home_dir
 orautils::oraInventoryParam:      "/opt/oracle/oraInventory"
-orautils::osDomainTypeParam:      "admin"
+orautils::osDomainTypeParam:      "soa"
 orautils::osLogFolderParam:       *wls_log_dir
 orautils::osDownloadFolderParam:  *wls_download_dir
 orautils::osMdwHomeParam:         *wls_middleware_home_dir

@@ -1,0 +1,21 @@
+
+rm -rf /opt/oracle/middleware11g/user_projects
+
+
+bring the domain down
+/opt/oracle/middleware11g/user_projects/domains/soa_basedomain/bin/stopWebLogic.sh
+
+/opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /vagrant/assignSoaBamToClusters.py
+
+
+/opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /opt/oracle/middleware11g/Oracle_SOA1/bin/soa-createUDD.py --domain_home /opt/oracle/middleware11g/user_projects/domains/soa_basedomain --bamcluster BamCluster --soacluster SoaCluster --create_jms true
+
+
+/opt/oracle/middleware11g/user_projects/domains/soa_basedomain/bin/startWebLogic.sh
+
+todo
+
+
+persistence store
+
+ssl off on managed servers

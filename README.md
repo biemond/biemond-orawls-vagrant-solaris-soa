@@ -4,7 +4,7 @@ biemond-orawls-vagrant-solaris
 The reference implementation of https://github.com/biemond/biemond-orawls  
 optimized for linux,solaris and the use of Hiera  
 
-creates a patched 10.3.6 SOA Suite WebLogic cluster ( adminsol,nodesol1 , nodesol2 )
+creates a patched 10.3.6 SOA Suite WebLogic cluster ( adminsol, nodesol1 , nodesol2 )
 creates an Oracle Database 12.1 ( dbsol )
 creates an Linux RCU Host ( rcunod )
 
@@ -13,11 +13,8 @@ https://github.com/biemond/biemond-orawls-vagrant-solaris-soa/blob/master/puppet
 
 The used hiera files https://github.com/biemond/biemond-orawls-vagrant-solaris-soa/tree/master/puppet/hieradata
 
+This box uses the following software
 
-used the following software
-
-Sun solaris 10 x86 64bits DVD iso, from edelivery.oracle.com
-- V36435-01.iso
 
 JDK 7
 - jdk-7u45-solaris-i586.tar.gz
@@ -32,7 +29,6 @@ WebLogic 10.3.6
 - p17071663_1036_Generic.zip
 
 FMW 11 PS6
-- ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip
 - ofm_soa_generic_11.1.1.7.0_disk1_1of2.zip
 - ofm_soa_generic_11.1.1.7.0_disk1_2of2.zip
 
@@ -42,15 +38,20 @@ FWM 11 PS6 SOA Suite 11g Opatch
 RCU Linux 64
 - ofm_rcu_linux_11.1.1.7.0_64_disk1_1of1.zip
 
+optional
+
+Sun solaris 10 x86 64bits DVD iso, from edelivery.oracle.com
+- V36435-01.iso
+
+FMW 11 PS6
+- ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip
+
 Using the following facts
 
 - environment => "development"
 - vm_type     => "vagrant"
-- env_app1    => "application_One"
-- env_app2    => "application_Two"
 
 also need to set "--parser future" to the puppet configuration, cause it uses lambda expressions for collection of yaml entries from application_One and application_Two
-
 
 Detailed vagrant steps (setup) can be found here:
 

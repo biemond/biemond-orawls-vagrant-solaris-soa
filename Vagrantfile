@@ -34,8 +34,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.facter = {
         "environment" => "development",
         "vm_type"     => "vagrant",
-        "env_app1"    => "application_One",
-        "env_app2"    => "application_Two",
    }
       
     end
@@ -70,8 +68,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.facter = {
         "environment" => "development",
         "vm_type"     => "vagrant",
-        "env_app1"    => "application_One",
-        "env_app2"    => "application_Two",
       }
       
     end
@@ -106,8 +102,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.facter = {
         "environment" => "development",
         "vm_type"     => "vagrant",
-        "env_app1"    => "application_One",
-        "env_app2"    => "application_Two",
       }
       
     end
@@ -141,8 +135,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.facter = {
         "environment" => "development",
         "vm_type"     => "vagrant",
-        "env_app1"    => "application_One",
-        "env_app2"    => "application_Two",
       }
       
     end
@@ -176,8 +168,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.facter = {
         "environment"                     => "development",
         "vm_type"                         => "vagrant",
-        "env_app1"                        => "application_One",
-        "env_app2"                        => "application_Two",
       }
     end
   end
