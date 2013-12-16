@@ -20,7 +20,7 @@ domain_user_key_file:       "/export/home/oracle/oracle-soa_basedomain-WebLogicK
 # create a standard domain
 domain_instances:
   'wlsDomain':
-     domain_template:          "soa"
+     domain_template:          "soa_bpm"
      development_mode:         false
      log_output:               *logoutput
      repository_database_url:  "jdbc:oracle:thin:@dbsol.example.com:1521:test.oracle.com"
