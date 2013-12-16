@@ -20,7 +20,7 @@ domain_user_key_file:       "/export/home/oracle/oracle-soa_basedomain-WebLogicK
 # create a standard domain
 domain_instances:
   'wlsDomain':
-     domain_template:          "soa_bpm"
+     domain_template:          "soa"
      development_mode:         false
      log_output:               *logoutput
      repository_database_url:  "jdbc:oracle:thin:@dbsol.example.com:1521:test.oracle.com"
@@ -33,8 +33,10 @@ fmw_cluster_instances:
      domain_dir:           "/opt/oracle/middleware11g/user_projects/domains/soa_basedomain"
      soa_cluster_name:     "SoaCluster"
      bam_cluster_name:     "BamCluster"
-     # osb_cluster_name:     "OsbCluster"
      log_output:           *logoutput
+     bpm_enabled:          true
+     bam_enabled:          true
+     soa_enabled:          true
 
 # pack domains
 pack_domain_instances:
