@@ -3,7 +3,7 @@
 # installs FMW software like ADF,OIM,WC,WCC,OSB & SOA Suite
 #
 ##
-define orawls::fmw (
+define orawls::fmw(
   $weblogic_home_dir          = hiera('wls_weblogic_home_dir'     , undef), # /opt/oracle/middleware11gR1/wlserver_103
   $middleware_home_dir        = hiera('wls_middleware_home_dir'   , undef), # /opt/oracle/middleware11gR1
   $oracle_base_home_dir       = hiera('wls_oracle_base_home_dir'  , undef), # /opt/oracle

@@ -1,7 +1,7 @@
 # test
 #
-# one machine setup with weblogic 12.1.2
-# creates an WLS Domain with JAX-WS (advanced, soap over jms)
+# one machine setup with weblogic 10.3.6
+# creates an OSB,SOA,BAM, BPM WLS Domain
 # needs jdk7, orawls, orautils, fiddyspence-sysctl, erwbgy-limits puppet modules
 #
 

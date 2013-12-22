@@ -143,8 +143,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "rcunod" do |rcunod|
 
-    rcunod.vm.box = "centos-6.4-x86_64"
-    rcunod.vm.box_url = "https://dl.dropboxusercontent.com/s/yg9ceak6zd86wk7/centos-6.4-x86_64.box"
+    rcunod.vm.box = "centos-6.5-x86_64"
+    rcunod.vm.box_url = "https://dl.dropboxusercontent.com/s/np39xdpw05wfmv4/centos-6.5-x86_64.box"
   
     rcunod.vm.hostname = "rcunod.example.com"
   
