@@ -19,9 +19,12 @@ BamAdmin       = '<%= @bam_cluster_name %>,<%= @adminserver_name %>'
 OsbAdmin       = '<%= @osb_cluster_name %>,<%= @adminserver_name %>'
 Admin          = '<%= @adminserver_name %>'
 
-if bamEnabled == true and soaEnabled == true and osbEnabled == true:
+if   bamEnabled == true and soaEnabled == true and osbEnabled == true:
     All            = '<%= @soa_cluster_name %>,<%= @osb_cluster_name %>,<%= @bam_cluster_name %>,<%= @adminserver_name %>'
     Adapters       = '<%= @soa_cluster_name %>,<%= @osb_cluster_name %>,<%= @adminserver_name %>'
+elif bamEnabled == true and soaEnabled == true and osbEnabled == false:
+    All            = '<%= @soa_cluster_name %>,<%= @bam_cluster_name %>,<%= @adminserver_name %>'
+    Adapters       = '<%= @soa_cluster_name %>,<%= @adminserver_name %>'
 elif bamEnabled == false and soaEnabled == true and osbEnabled == true:
     All            = '<%= @soa_cluster_name %>,<%= @osb_cluster_name %>,<%= @adminserver_name %>'
     Adapters       = '<%= @soa_cluster_name %>,<%= @osb_cluster_name %>,<%= @adminserver_name %>'
