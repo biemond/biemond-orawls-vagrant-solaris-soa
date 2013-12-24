@@ -48,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dbsol.vm.hostname = "dbsol.example.com"
     dbsol.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
     dbsol.vm.network :private_network, ip: "10.10.10.5"
+    #dbsol.vm.network :forwarded_port, guest: 22, host: 2228
   
     dbsol.vm.provider :virtualbox do |vb|
       vb.customize ["modifyvm"     , :id, "--memory", "3548"]
