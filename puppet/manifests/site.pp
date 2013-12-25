@@ -361,7 +361,7 @@ class fmw_cluster{
   notify { 'class fmw_cluster':} 
   $default_params = {}
   $fmw_cluster_instances = hiera('fmw_cluster_instances', $default_params)
-  create_resources('orawls::utils::fmwcluster',$fmw_cluster_instances, $default_params)
+  #create_resources('orawls::utils::fmwcluster',$fmw_cluster_instances, $default_params)
 }
 
 class pack_domain{
