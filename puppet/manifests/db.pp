@@ -55,7 +55,7 @@ class os {
   }
 
   exec { "add localhost":
-    command => "/bin/echo '127.0.0.1 localhost ${fqdn} ${hostname}' >>/etc/hosts",
+    command => "/bin/echo '10.10.10.5 localhost ${fqdn} ${hostname}' >>/etc/hosts",
     unless  => "/usr/bin/grep -c ${hostname} /etc/hosts",
     require => Exec["remove localhost"],
   }
@@ -201,11 +201,13 @@ class db12c {
             require      => Oradb::Installdb['12.1_solaris-x64'],
    }
 
-   exec { "replace localhost listener.ora":
-        command     => "/bin/sed -e's/localhost/0.0.0.0/g' /oracle/product/12.1/db/network/admin/listener.ora > /tmp/ora.tmp && mv /tmp/ora.tmp /oracle/product/12.1/db/network/admin/listener.ora" ,
-        require     => Oradb::Net['config net8'],
-        onlyif      => "/bin/grep -c localhost /oracle/product/12.1/db/network/admin/listener.ora",
-   }
+#   exec { "replace localhost listener.ora":
+#        command     => "/bin/sed -e's/localhost/0.0.0.0/g' /oracle/product/12.1/db/network/admin/listener.ora > /tmp/ora.tmp && mv /tmp/ora.tmp /oracle/product/12.1/db/network/admin/listener.ora" ,
+#        require     => Oradb::Net['config net8'],
+#        onlyif      => "/bin/grep -c localhost /oracle/product/12.1/db/network/admin/listener.ora",
+#        user        => 'oracle',
+#        group       => 'dba',
+#   }
 
 
    oradb::listener{'start listener':
@@ -214,7 +216,8 @@ class db12c {
             user         => 'oracle',
             group        => 'dba',
             action       => 'start',  
-            require      => Exec["replace localhost listener.ora"],
+#            require      => Exec["replace localhost listener.ora"],
+            require      => Oradb::Net['config net8'],
    }
 
    oradb::database{ 'testDb': 
