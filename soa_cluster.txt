@@ -1,9 +1,7 @@
 
-rm -rf /opt/oracle/middleware11g/user_projects
-
-
 bring the domain down
 /opt/oracle/middleware11g/user_projects/domains/soa_basedomain/bin/stopWebLogic.sh
+rm -rf /opt/oracle/middleware11g/user_projects
 
 /opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /vagrant/assignOsbSoaBpmBamToClusters.py
 /opt/oracle/middleware11g/Oracle_SOA1/common/bin/wlst.sh /vagrant/soa-bpm-createUDD.py
