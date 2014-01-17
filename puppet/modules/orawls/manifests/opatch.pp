@@ -71,7 +71,7 @@ define orawls::opatch (
         group     => $os_group,
         logoutput => $log_output,
       }
-    } 
+    }
 
     $oPatchCommand = "opatch apply -silent -jre"
 

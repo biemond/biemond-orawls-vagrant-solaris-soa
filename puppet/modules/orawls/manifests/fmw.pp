@@ -3,7 +3,7 @@
 # installs FMW software like ADF,OIM,WC,WCC,OSB & SOA Suite
 #
 ##
-define orawls::fmw(
+define orawls::fmw (
   $weblogic_home_dir          = hiera('wls_weblogic_home_dir'     , undef), # /opt/oracle/middleware11gR1/wlserver_103
   $middleware_home_dir        = hiera('wls_middleware_home_dir'   , undef), # /opt/oracle/middleware11gR1
   $oracle_base_home_dir       = hiera('wls_oracle_base_home_dir'  , undef), # /opt/oracle
@@ -159,7 +159,7 @@ define orawls::fmw(
     }
 
 
-     
+
     if ( $total_files > 1 ) {
 
       # for performance reasons, download and extract or just extract it
@@ -200,7 +200,7 @@ define orawls::fmw(
     $command = "-silent -response ${download_dir}/${title}_silent_${fmw_product}.rsp -waitforcompletion "
 
     if $::kernel == "SunOS" {
-   
+
       if $fmw_product == "soa" {
         exec { "add -d64 oraparam.ini ${title}":
           command   => "sed -e's/JRE_MEMORY_OPTIONS=\" -Xverify:none\"/JRE_MEMORY_OPTIONS=\"-d64 -Xverify:none\"/g' ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini > /tmp/soa.tmp && mv /tmp/soa.tmp ${download_dir}/${fmw_product}/Disk1/install/${installDir}/oraparam.ini",
@@ -228,7 +228,7 @@ define orawls::fmw(
       }
     }
 
-    
+
     exec { "install ${fmw_product} ${title}":
       command   => "${download_dir}/${fmw_product}/Disk1/install/${installDir}/runInstaller ${command} -invPtrLoc ${oraInstPath}/oraInst.loc -ignoreSysPrereqs -jreLoc ${jdk_home_dir}",
       creates   => $oracleHome,

@@ -263,7 +263,7 @@ define orawls::domain (
       }
     }
 
-    # create domain 
+    # create domain
     exec { "execwlst ${domain_name} ${title}":
       command     => "${wlstPath}/wlst.sh ${download_dir}/domain_${domain_name}.py",
       environment => ["JAVA_HOME=${jdk_home_dir}"],
@@ -290,8 +290,8 @@ define orawls::domain (
         group   => $os_group,
       }
 
-      if ($domain_template == 'osb' or 
-          $domain_template == 'osb_soa' or 
+      if ($domain_template == 'osb' or
+          $domain_template == 'osb_soa' or
           $domain_template == 'osb_soa_bpm'){
         exec { "setOSBDebugFlagOnFalse ${domain_name} ${title}":
           command => "sed -e's/ALSB_DEBUG_FLAG=\"true\"/ALSB_DEBUG_FLAG=\"false\"/g' ${domain_dir}/${domain_name}/bin/setDomainEnv.sh > /tmp/domain2.tmp && mv /tmp/domain2.tmp ${domain_dir}/${domain_name}/bin/setDomainEnv.sh",
@@ -314,8 +314,8 @@ define orawls::domain (
         group   => $os_group,
       }
 
-      if ($domain_template == 'osb' or 
-          $domain_template == 'osb_soa' or 
+      if ($domain_template == 'osb' or
+          $domain_template == 'osb_soa' or
           $domain_template == 'osb_soa_bpm'){
         exec { "setOSBDebugFlagOnFalse ${domain_name} ${title}":
           command => "sed -e's/ALSB_DEBUG_FLAG=\"true\"/ALSB_DEBUG_FLAG=\"false\"/g' ${domain_dir}/${domain_name}/bin/setDomainEnv.sh",
