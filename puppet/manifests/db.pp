@@ -189,7 +189,7 @@ class db12c {
             group                  => 'dba',
             downloadDir            => '/install',
             remoteFile             => false,
-            puppetDownloadMntPoint => "/vagrant",  
+            puppetDownloadMntPoint => "/software",  
     }
 
    oradb::net{ 'config net8':

@@ -28,6 +28,11 @@ The used hiera files https://github.com/biemond/biemond-orawls-vagrant-solaris-s
 
 This box uses the following software
 
+Add the all the Oracle binaris to /software, edit Vagrantfile and update all entries like
+- adminsol.vm.synced_folder "/Users/edwin/software", "/software"
+- dbsol.vm.synced_folder "/Users/edwin/software", "/software"
+
+
 
 JDK 7
 - jdk-7u45-solaris-i586.tar.gz

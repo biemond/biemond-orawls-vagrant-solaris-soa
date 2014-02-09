@@ -97,7 +97,7 @@ class rcu {
                  schemaPrefix     => 'DEV',
                  reposPassword    => 'Welcome01',
                  tempTablespace   => 'TEMP',
-                 puppetDownloadMntPoint => '/vagrant',
+                 puppetDownloadMntPoint => '/software',
                  remoteFile       => false,
                  logoutput        => true,
   }

@@ -253,7 +253,7 @@ class java {
     fullVersion          => 'jdk1.7.0_45',
     x64                  => true,
     downloadDir          => '/data/install',
-    sourcePath           => "/vagrant",
+    sourcePath           => "/software",
   }  
 
 }
