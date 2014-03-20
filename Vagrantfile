@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.manifests_path    = "puppet/manifests"
       puppet.module_path       = "puppet/modules"
       puppet.manifest_file     = "site.pp"
-      puppet.options           = "--verbose --parser future --hiera_config /vagrant/puppet/hiera.yaml"
+      puppet.options           = "--verbose --hiera_config /vagrant/puppet/hiera.yaml"
   
       puppet.facter = {
         "environment" => "development",
@@ -104,7 +104,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.manifests_path    = "puppet/manifests"
       puppet.module_path       = "puppet/modules"
       puppet.manifest_file     = "node.pp"
-      puppet.options           = "--verbose --parser future --hiera_config /vagrant/puppet/hiera.yaml"
+      puppet.options           = "--verbose --hiera_config /vagrant/puppet/hiera.yaml"
   
       puppet.facter = {
         "environment" => "development",
@@ -139,7 +139,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       puppet.manifests_path    = "puppet/manifests"
       puppet.module_path       = "puppet/modules"
       puppet.manifest_file     = "node.pp"
-      puppet.options           = "--verbose --parser future --hiera_config /vagrant/puppet/hiera.yaml"
+      puppet.options           = "--verbose --hiera_config /vagrant/puppet/hiera.yaml"
   
       puppet.facter = {
         "environment" => "development",

@@ -292,6 +292,18 @@ class domains{
   $default_params = {}
   $domain_instances = hiera('domain_instances', [])
   create_resources('orawls::domain',$domain_instances, $default_params)
+
+  $domain_address = hiera('domain_adminserver_address')
+  $domain_port    = hiera('domain_adminserver_port')
+
+  wls_setting { 'default':
+    user               => hiera('wls_os_user'),
+    weblogic_home_dir  => hiera('wls_weblogic_home_dir'),
+    connect_url        => "t3://${domain_address}:${domain_port}",
+    weblogic_user      => hiera('wls_weblogic_user'),
+    weblogic_password  => hiera('domain_wls_password'),
+  }
+
 }
 
 class nodemanager {
@@ -328,31 +340,25 @@ class machines{
   notify { 'class machines':} 
   $default_params = {}
   $machines_instances = hiera('machines_instances', [])
-  create_resources('orawls::wlstexec',$machines_instances, $default_params)
+  create_resources('wls_machine',$machines_instances, $default_params)
 }
 
 class managed_servers{
   require machines
 
   notify { 'class managed_servers':} 
-  # lookup all managed_servers_instances in all hiera files
-  $allHieraEntries = hiera_array('managed_servers_instances')
-  orawls::utils::wlstbulk{ 'managed_servers_instances':
-    entries_array => $allHieraEntries,
-  }
-
+  $default_params = {}
+  $managed_servers_instances = hiera('managed_servers_instances', {})
+  create_resources('wls_server',$managed_servers_instances, $default_params)
 }
 
 class clusters{
   require managed_servers
 
   notify { 'class clusters':} 
-  # lookup all managed_servers_instances in all hiera files
-  $allHieraEntries = hiera_array('cluster_instances')
-  orawls::utils::wlstbulk{ 'cluster_instances':
-    entries_array => $allHieraEntries,
-  }
-
+  $default_params = {}
+  $cluster_instances = hiera('cluster_instances', {})
+  create_resources('wls_cluster',$cluster_instances, $default_params)
 }
 
 class fmw_cluster{

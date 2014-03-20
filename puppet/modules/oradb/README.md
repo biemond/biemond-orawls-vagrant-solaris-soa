@@ -19,7 +19,8 @@ Should work for Puppet 2.7 & 3.0
 Version updates
 ---------------
 
-- 0.9.7 Oracle database client 11.2.0.1 , 12.1.0.1 support, refactored installdb,net,goldengate
+- 0.9.9 emConfiguration parameter for Database creation
+- 0.9.7 Oracle database 11.2.0.1, 12.1.0.1 client support, refactored installdb,net,goldengate
 - 0.9.6 GoldenGate 11.2 support
 - 0.9.6 GoldenGate 12.1.2 support
 - 0.9.5 RCU fixes for OIM,OAM
@@ -57,7 +58,7 @@ Oracle Database Features
 - Apply OPatch
 - Create database instances
 - Stop/Start database instances
-- GoldenGate 12.1.2 ,11.2.1
+- GoldenGate 12.1.2, 11.2.1
 - Installs RCU repositoy for Oracle SOA Suite / Webcenter ( 11.1.1.6.0 and 11.1.1.7.0 ) / Oracle Identity Management ( 11.1.2.1 )
 
 Some manifests like installdb.pp, opatch.pp or rcusoa.pp supports an alternative mountpoint for the big oracle files.
@@ -315,6 +316,7 @@ other
                       memoryPercentage        => "40",
                       memoryTotal             => "800",
                       databaseType            => "MULTIPURPOSE",
+                      emConfiguration         => "NONE",
                       require                 => Oradb::Listener['start listener'],
     }
     

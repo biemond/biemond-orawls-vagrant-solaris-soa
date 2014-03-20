@@ -70,107 +70,96 @@ userconfig_instances:
 
 # create 2 machines
 machines_instances:
-  'createMachine_node1':
-     log_output:           *logoutput
-     weblogic_type:        "machine"
-     weblogic_object_name: "Node1"
-     script:               'createMachine.py'
-     params:
-        - "machineName      = 'Node1'"
-        - "machineDnsName   = '10.10.10.100'"
-  'createMachine_node2':
-     log_output:           *logoutput
-     weblogic_type:        "machine"
-     weblogic_object_name: "Node2"
-     script:               'createMachine.py'
-     params:
-        - "machineName      = 'Node2'"
-        - "machineDnsName   = '10.10.10.200'"
+  'Node1':
+    ensure:         'present'
+    listenaddress:  '10.10.10.100'
+    listenport:     '5556'
+    machinetype:    'UnixMachine'
+    nmtype:         'SSL'
+  'Node2':
+    ensure:         'present'
+    listenaddress:  '10.10.10.200'
+    listenport:     '5556'
+    machinetype:    'UnixMachine'
+    nmtype:         'SSL'
 
-# create 2 managed servers and assign them to the machines
 managed_servers_instances:
-   - clusterOne:
-      global_parameters:
-         log_output:           *logoutput
-         weblogic_type:        "server"
-         script:               'createServer.py'
-         params:
-            - "nodeMgrLogDir    = '/data/logs'"
-      wlsServer1_node1:
-         weblogic_object_name: "SoaServer1"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=512m -Xms752m -Xmx1024m -Dweblogic.Stdout=/data/logs/SoaServer1.out -Dweblogic.Stderr=/data/logs/SoaServer1_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol1.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'"
-            - "wlsServerName    = 'SoaServer1'"
-            - "machineName      = 'Node1'"
-            - "listenAddress    = '10.10.10.100'"
-            - "listenPort       = 8101"
-      wlsServer2_node2:
-         weblogic_object_name: "SoaServer2"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=512m -Xms752m -Xmx1024m -Dweblogic.Stdout=/data/logs/SoaServer2.out -Dweblogic.Stderr=/data/logs/SoaServer2_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol2.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'"
-            - "wlsServerName    = 'SoaServer2'"
-            - "machineName      = 'Node2'"
-            - "listenAddress    = '10.10.10.200'"
-            - "listenPort       = 8101"
-      wlsServer3_node1:
-         weblogic_object_name: "BamServer1"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/BamServer1.out -Dweblogic.Stderr=/data/logs/BamServer1_err.out'"
-            - "wlsServerName    = 'BamServer1'"
-            - "machineName      = 'Node1'"
-            - "listenAddress    = '10.10.10.100'"
-            - "listenPort       = 8102"
-      wlsServer4_node2:
-         weblogic_object_name: "BamServer2"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/BamServer2.out -Dweblogic.Stderr=/data/logs/BamServer2_err.out'"
-            - "wlsServerName    = 'BamServer2'"
-            - "machineName      = 'Node2'"
-            - "listenAddress    = '10.10.10.200'"
-            - "listenPort       = 8102"
-      wlsServer5_node1:
-         weblogic_object_name: "OsbServer1"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/OsbServer1.out -Dweblogic.Stderr=/data/logs/OsbServer1_err.out -DOSB.coherence.localhost=nodesol1.example.com -DOSB.coherence.localport=7890 -DOSB.coherence.wka1=nodesol1.example.com -DOSB.coherence.wka1.port=7890 -DOSB.coherence.wka2=nodesol2.example.com -DOSB.coherence.wka2.port=7890'"
-            - "wlsServerName    = 'OsbServer1'"
-            - "machineName      = 'Node1'"
-            - "listenAddress    = '10.10.10.100'"
-            - "listenPort       = 8103"
-      wlsServer6_node2:
-         weblogic_object_name: "OsbServer2"
-         params:
-            - "javaArguments    = '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/OsbServer2.out -Dweblogic.Stderr=/data/logs/OsbServer2_err.out -DOSB.coherence.localhost=nodesol2.example.com -DOSB.coherence.localport=7890 -DOSB.coherence.wka1=nodesol1.example.com -DOSB.coherence.wka1.port=7890 -DOSB.coherence.wka2=nodesol2.example.com -DOSB.coherence.wka2.port=7890'"
-            - "wlsServerName    = 'OsbServer2'"
-            - "machineName      = 'Node2'"
-            - "listenAddress    = '10.10.10.200'"
-            - "listenPort       = 8103"
+      'SoaServer1':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=512m -Xms752m -Xmx1024m -Dweblogic.Stdout=/data/logs/SoaServer1.out -Dweblogic.Stderr=/data/logs/SoaServer1_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol1.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'
+         listenaddress:                  '10.10.10.100'
+         listenport:                     '8001'
+         logfilename:                    '/data/logs/SoaServer1.log'
+         machine:                        'Node1'
+         sslenabled:                     '1'
+         ssllistenport:                  '8002'
+         sslhostnameverificationignored: '1'
+      'SoaServer2':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=512m -Xms752m -Xmx1024m -Dweblogic.Stdout=/data/logs/SoaServer2.out -Dweblogic.Stderr=/data/logs/SoaServer2_err.out -Dtangosol.coherence.wka1=nodesol1.example.com -Dtangosol.coherence.wka2=nodesol2.example.com -Dtangosol.coherence.localhost=nodesol2.example.com -Dtangosol.coherence.localport=8089 -Dtangosol.coherence.wka1.port=8089 -Dtangosol.coherence.wka2.port=8089'
+         listenport:                     '8001'
+         logfilename:                    '/data/logs/wlsServer2.log'
+         machine:                        'Node2'
+         sslenabled:                     '1'
+         ssllistenport:                  '8002'
+         sslhostnameverificationignored: '1'
+         listenaddress:                  '10.10.10.200'
+      'BamServer1':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/BamServer1.out -Dweblogic.Stderr=/data/logs/BamServer1_err.out'
+         listenaddress:                  '10.10.10.100'
+         listenport:                     '9001'
+         logfilename:                    '/data/logs/BamServer1.log'
+         machine:                        'Node1'
+         sslenabled:                     '1'
+         ssllistenport:                  '9002'
+         sslhostnameverificationignored: '1'
+      'BamServer2':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/BamServer2.out -Dweblogic.Stderr=/data/logs/BamServer2_err.out'
+         listenport:                     '9001'
+         logfilename:                    '/data/logs/BamServer2.log'
+         machine:                        'Node2'
+         sslenabled:                     '1'
+         ssllistenport:                  '9002'
+         sslhostnameverificationignored: '1'
+         listenaddress:                  '10.10.10.200'
+      'OsbServer1':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/OsbServer1.out -Dweblogic.Stderr=/data/logs/OsbServer1_err.out -DOSB.coherence.localhost=nodesol1.example.com -DOSB.coherence.localport=7890 -DOSB.coherence.wka1=nodesol1.example.com -DOSB.coherence.wka1.port=7890 -DOSB.coherence.wka2=nodesol2.example.com -DOSB.coherence.wka2.port=7890'
+         listenaddress:                  '10.10.10.100'
+         listenport:                     '8011'
+         logfilename:                    '/data/logs/OsbServer1.log'
+         machine:                        'Node1'
+         sslenabled:                     '1'
+         ssllistenport:                  '8012'
+         sslhostnameverificationignored: '1'
+      'OsbServer2':
+         ensure:                         'present'
+         arguments:                      '-XX:PermSize=256m -XX:MaxPermSize=256m -Xms752m -Xmx752m -Dweblogic.Stdout=/data/logs/OsbServer2.out -Dweblogic.Stderr=/data/logs/OsbServer2_err.out -DOSB.coherence.localhost=nodesol2.example.com -DOSB.coherence.localport=7890 -DOSB.coherence.wka1=nodesol1.example.com -DOSB.coherence.wka1.port=7890 -DOSB.coherence.wka2=nodesol2.example.com -DOSB.coherence.wka2.port=7890'
+         listenport:                     '8011'
+         logfilename:                    '/data/logs/OsbServer2.log'
+         machine:                        'Node2'
+         sslenabled:                     '1'
+         ssllistenport:                  '8012'
+         sslhostnameverificationignored: '1'
+         listenaddress:                  '10.10.10.200'
+
 
 # create cluster and assign the managed servers
 cluster_instances:
-   - clusterOne:
-      cluster_web:
-         weblogic_object_name: "SoaCluster"
-         log_output:           *logoutput
-         weblogic_type:        "cluster"
-         script:               'createCluster.py'
-         params:
-            - "clusterName      = 'SoaCluster'"
-            - "clusterNodes     = 'SoaServer1,SoaServer2'"
-      cluster_web2:
-         weblogic_object_name: "BamCluster"
-         log_output:           *logoutput
-         weblogic_type:        "cluster"
-         script:               'createCluster.py'
-         params:
-            - "clusterName      = 'BamCluster'"
-            - "clusterNodes     = 'BamServer2,BamServer1'"
-      cluster_web3:
-         weblogic_object_name: "OsbCluster"
-         log_output:           *logoutput
-         weblogic_type:        "cluster"
-         script:               'createCluster.py'
-         params:
-            - "clusterName      = 'OsbCluster'"
-            - "clusterNodes     = 'OsbServer1,OsbServer2'"
-
-
+      'SoaCluster':
+        ensure:         'present'
+        messagingmode:  'unicast'
+        migrationbasis: 'consensus'
+        servers:        'SoaServer1,SoaServer2'
+      'BamCluster':
+        ensure:         'present'
+        messagingmode:  'unicast'
+        migrationbasis: 'consensus'
+        servers:        'BamServer2,BamServer1'
+      'OsbCluster':
+        ensure:         'present'
+        messagingmode:  'unicast'
+        migrationbasis: 'consensus'
+        servers:        'OsbServer1,OsbServer2'
