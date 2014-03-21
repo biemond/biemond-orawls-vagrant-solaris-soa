@@ -190,7 +190,7 @@ def get_domain(domain_path,n)
   if FileTest.exists?(domainfile)
 
     file = File.read( domainfile)
-    doc = REXML::Document.new file
+    doc  = REXML::Document.new file
     root = doc.root
 
     Facter.add("#{prefix}_domain_#{n}") do

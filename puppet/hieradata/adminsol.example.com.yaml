@@ -157,7 +157,7 @@ cluster_instances:
         ensure:         'present'
         messagingmode:  'unicast'
         migrationbasis: 'consensus'
-        servers:        'BamServer2,BamServer1'
+        servers:        'BamServer1,BamServer2'
       'OsbCluster':
         ensure:         'present'
         messagingmode:  'unicast'
