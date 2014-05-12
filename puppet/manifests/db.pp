@@ -7,7 +7,7 @@ node 'dbsol.example.com'  {
 class os {
 
   $default_params = {}
-  $host_instances = hiera('hosts', [])
+  $host_instances = hiera('hosts', {})
   create_resources('host',$host_instances, $default_params)
 
   # exec { "create /cdrom/unnamed_cdrom":
@@ -60,19 +60,22 @@ class os {
     require => Exec["remove localhost"],
   }
 
-  group { 'dba' :
+  $groups = ['oinstall','dba' ,'oper' ]
+
+  group { $groups :
     ensure      => present,
   }
 
   user { 'oracle' :
     ensure      => present,
-    gid         => 'dba',  
-    groups      => 'dba',
+    uid         => 500,
+    gid         => 'oinstall',  
+    groups      => $groups,
     shell       => '/bin/bash',
     password    => '$1$DSJ51vh6$4XzzwyIOk6Bi/54kglGk3.',
     home        => "/export/home/oracle",
-    comment     => "This user ${user} was created by Puppet",
-    require     => Group['dba'],
+    comment     => "This user oracle was created by Puppet",
+    require     => Group[$groups],
     managehome  => true,
   }
 
@@ -187,6 +190,8 @@ class db12c {
             createUser             => false,
             user                   => 'oracle',
             group                  => 'dba',
+            group_install          => 'oinstall',
+            group_oper             => 'oper',
             downloadDir            => '/install',
             remoteFile             => false,
             puppetDownloadMntPoint => "/software",  
@@ -201,22 +206,12 @@ class db12c {
             require      => Oradb::Installdb['12.1_solaris-x64'],
    }
 
-#   exec { "replace localhost listener.ora":
-#        command     => "/bin/sed -e's/localhost/0.0.0.0/g' /oracle/product/12.1/db/network/admin/listener.ora > /tmp/ora.tmp && mv /tmp/ora.tmp /oracle/product/12.1/db/network/admin/listener.ora" ,
-#        require     => Oradb::Net['config net8'],
-#        onlyif      => "/bin/grep -c localhost /oracle/product/12.1/db/network/admin/listener.ora",
-#        user        => 'oracle',
-#        group       => 'dba',
-#   }
-
-
    oradb::listener{'start listener':
             oracleBase   => '/oracle',
             oracleHome   => '/oracle/product/12.1/db',
             user         => 'oracle',
             group        => 'dba',
             action       => 'start',  
-#            require      => Exec["replace localhost listener.ora"],
             require      => Oradb::Net['config net8'],
    }
 
@@ -253,11 +248,5 @@ class db12c {
                    require                 => Oradb::Database['testDb'],
    }
 
-   # oradb::autostartdatabase{ 'autostart oracle': 
-   #                 oracleHome              => '/oracle/product/12.1/db',
-   #                 user                    => 'oracle',
-   #                 dbName                  => 'test',
-   #                 require                 => Oradb::Dbactions['start testDb'],
-   # }
 }
 

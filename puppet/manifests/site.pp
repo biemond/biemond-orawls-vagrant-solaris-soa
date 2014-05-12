@@ -27,7 +27,7 @@ class os {
   notice "class os ${operatingsystem}"
 
   $default_params = {}
-  $host_instances = hiera('hosts', [])
+  $host_instances = hiera('hosts', {})
   create_resources('host',$host_instances, $default_params)
 
   ## vagrant settings
@@ -263,7 +263,7 @@ class bsu{
 
   notify { 'class bsu':} 
   $default_params = {}
-  $bsu_instances = hiera('bsu_instances', [])
+  $bsu_instances = hiera('bsu_instances', {})
   create_resources('orawls::bsu',$bsu_instances, $default_params)
 }
 
@@ -272,7 +272,7 @@ class fmw{
 
   notify { 'class fmw':} 
   $default_params = {}
-  $fmw_installations = hiera('fmw_installations', [])
+  $fmw_installations = hiera('fmw_installations', {})
   create_resources('orawls::fmw',$fmw_installations, $default_params)
 }
 
@@ -281,7 +281,7 @@ class opatch{
 
   notice 'class opatch'
   $default_params = {}
-  $opatch_instances = hiera('opatch_instances', [])
+  $opatch_instances = hiera('opatch_instances', {})
   create_resources('orawls::opatch',$opatch_instances, $default_params)
 }
 
@@ -290,7 +290,7 @@ class domains{
 
   notice 'class domains'
   $default_params = {}
-  $domain_instances = hiera('domain_instances', [])
+  $domain_instances = hiera('domain_instances', {})
   create_resources('orawls::domain',$domain_instances, $default_params)
 
   $domain_address = hiera('domain_adminserver_address')
@@ -309,44 +309,38 @@ class domains{
 class nodemanager {
   require orawls::weblogic, domains
 
-  notify { 'class nodemanager':} 
   $default_params = {}
-  $nodemanager_instances = hiera('nodemanager_instances', [])
+  $nodemanager_instances = hiera('nodemanager_instances', {})
   create_resources('orawls::nodemanager',$nodemanager_instances, $default_params)
 }
 
 class startwls {
   require orawls::weblogic, domains,nodemanager
 
-
-  notify { 'class startwls':} 
   $default_params = {}
-  $control_instances = hiera('control_instances', [])
+  $control_instances = hiera('control_instances', {})
   create_resources('orawls::control',$control_instances, $default_params)
 }
 
 class userconfig{
   require orawls::weblogic, domains, nodemanager, startwls 
 
-  notify { 'class userconfig':} 
   $default_params = {}
-  $userconfig_instances = hiera('userconfig_instances', [])
+  $userconfig_instances = hiera('userconfig_instances', {})
   create_resources('orawls::storeuserconfig',$userconfig_instances, $default_params)
 } 
 
 class machines{
   require userconfig
 
-  notify { 'class machines':} 
   $default_params = {}
-  $machines_instances = hiera('machines_instances', [])
+  $machines_instances = hiera('machines_instances', {})
   create_resources('wls_machine',$machines_instances, $default_params)
 }
 
 class managed_servers{
   require machines
 
-  notify { 'class managed_servers':} 
   $default_params = {}
   $managed_servers_instances = hiera('managed_servers_instances', {})
   create_resources('wls_server',$managed_servers_instances, $default_params)
@@ -355,7 +349,6 @@ class managed_servers{
 class clusters{
   require managed_servers
 
-  notify { 'class clusters':} 
   $default_params = {}
   $cluster_instances = hiera('cluster_instances', {})
   create_resources('wls_cluster',$cluster_instances, $default_params)
@@ -364,7 +357,6 @@ class clusters{
 class fmw_cluster{
   require clusters
 
-  notify { 'class fmw_cluster':} 
   $default_params = {}
   $fmw_cluster_instances = hiera('fmw_cluster_instances', $default_params)
   create_resources('orawls::utils::fmwcluster',$fmw_cluster_instances, $default_params)
@@ -373,7 +365,6 @@ class fmw_cluster{
 class pack_domain{
   require fmw_cluster
 
-  notify { 'class pack_domain':} 
   $default_params = {}
   $pack_domain_instances = hiera('pack_domain_instances', $default_params)
   create_resources('orawls::packdomain',$pack_domain_instances, $default_params)

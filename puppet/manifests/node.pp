@@ -16,11 +16,8 @@ node 'nodesol1.example.com', 'nodesol2.example.com' {
 # operating settings for Middleware
 class os {
 
-
-  notice "class os ${operatingsystem}"
-
   $default_params = {}
-  $host_instances = hiera('hosts', [])
+  $host_instances = hiera('hosts', {})
   create_resources('host',$host_instances, $default_params)
 
   # exec { "create /cdrom/unnamed_cdrom":
@@ -234,8 +231,6 @@ class ssh {
 class java {
   require os
 
-  notice 'class java'
-
   jdksolaris::install7{'jdk1.7.0_45':
     version              => '7u45',
     fullVersion          => 'jdk1.7.0_45',
@@ -243,34 +238,29 @@ class java {
     downloadDir          => '/data/install',
     sourcePath           => "/software",
   }  
-
-
 }
 
 class bsu{
   require  os,ssh,java, orawls::weblogic
 
-  notify { 'class bsu':} 
   $default_params = {}
-  $bsu_instances = hiera('bsu_instances', [])
+  $bsu_instances = hiera('bsu_instances', {})
   create_resources('orawls::bsu',$bsu_instances, $default_params)
 }
 
 class fmw{
   require bsu
 
-  notify { 'class fmw':} 
   $default_params = {}
-  $fmw_installations = hiera('fmw_installations', [])
+  $fmw_installations = hiera('fmw_installations', {})
   create_resources('orawls::fmw',$fmw_installations, $default_params)
 }
 
 class opatch{
   require fmw,bsu,orawls::weblogic
 
-  notice 'class opatch'
   $default_params = {}
-  $opatch_instances = hiera('opatch_instances', [])
+  $opatch_instances = hiera('opatch_instances', {})
   create_resources('orawls::opatch',$opatch_instances, $default_params)
 }
 
@@ -278,20 +268,16 @@ class opatch{
 class copydomain {
   require orawls::weblogic,fmw, opatch
 
-
-  notify { 'class copydomain':} 
   $default_params = {}
-  $copy_instances = hiera('copy_instances', [])
+  $copy_instances = hiera('copy_instances', {})
   create_resources('orawls::copydomain',$copy_instances, $default_params)
-
 }
 
 
 class nodemanager {
   require orawls::weblogic, opatch, copydomain
 
-  notify { 'class nodemanager':} 
   $default_params = {}
-  $nodemanager_instances = hiera('nodemanager_instances', [])
+  $nodemanager_instances = hiera('nodemanager_instances', {})
   create_resources('orawls::nodemanager',$nodemanager_instances, $default_params)
 }

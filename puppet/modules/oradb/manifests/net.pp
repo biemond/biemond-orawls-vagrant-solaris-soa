@@ -17,12 +17,12 @@ define oradb::net( $oracleHome   = undef,
     fail("Unrecognized version")
   }
 
-  $execPath    = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
+  $execPath = "${oracleHome}/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:"
 
   file { "${downloadDir}/netca_${version}.rsp":
       ensure       => present,
       content      => template("oradb/netca_${version}.rsp.erb"),
-      mode         => 0775,
+      mode         => '0775',
       owner        => $user,
       group        => $group,
   }
@@ -34,9 +34,7 @@ define oradb::net( $oracleHome   = undef,
     path           => $execPath,
     user           => $user,
     group          => $group,
-    environment => [
-        "USER=${user}",
-    ],
+    environment    => ["USER=${user}",],
     logoutput      => true,
   }
 }

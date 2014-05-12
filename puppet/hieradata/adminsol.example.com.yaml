@@ -30,7 +30,7 @@ domain_instances:
 # fmw cluster 
 fmw_cluster_instances:
   'soaCluster':
-     domain_dir:           "/opt/oracle/middleware11g/user_projects/domains/soa_basedomain"
+     domain_name:          "soa_basedomain"
      soa_cluster_name:     "SoaCluster"
      bam_cluster_name:     "BamCluster"
      osb_cluster_name:     "OsbCluster"
@@ -39,6 +39,8 @@ fmw_cluster_instances:
      bam_enabled:          true
      soa_enabled:          true
      osb_enabled:          true
+     repository_prefix:    "DEV"
+
 
 # pack domains
 pack_domain_instances:
@@ -55,7 +57,7 @@ nodemanager_instances:
 # startup adminserver for extra configuration
 control_instances:
   'startWLSAdminServer':
-     domain_dir:           "/opt/oracle/middleware11g/user_projects/domains/soa_basedomain"
+     domain_name:          "soa_basedomain"
      server_type:          'admin'
      target:               'Server'
      server:               'AdminServer'

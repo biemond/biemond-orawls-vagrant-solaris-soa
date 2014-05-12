@@ -49,15 +49,6 @@ define oradb::opatchupgrade( $oracleHome              = undef,
     }
   }
 
-  # check install folder
-  if ! defined(File[$downloadDir]) {
-    file { $downloadDir :
-      mode           => 0777,
-      path           => $downloadDir,
-      ensure         => directory,
-    }
-  }
-
   # if a mount was not specified then get the install media from the puppet master
   if $puppetDownloadMntPoint == undef {
     $mountDir        = "puppet:///modules/oradb"
@@ -78,11 +69,11 @@ define oradb::opatchupgrade( $oracleHome              = undef,
   if ( $continue ) {
     if ! defined(File["${downloadDir}/${patchFile}"]) {
       file {"${downloadDir}/${patchFile}":
-        path         => "${downloadDir}/${patchFile}",
         ensure       => present,
+        path         => "${downloadDir}/${patchFile}",
         source       => "${mountDir}/${patchFile}",
         require      => File[$downloadDir],
-        mode         => 0777,
+        mode         => '0777',
       }
     }
 
@@ -97,10 +88,11 @@ define oradb::opatchupgrade( $oracleHome              = undef,
         exec { "extract opatch ${patchFile}":
           command    => "unzip -n ${downloadDir}/${patchFile} -d ${oracleHome}",
           require    => File ["${downloadDir}/${patchFile}"],
+          logoutput  => false,
         }
         if $csiNumber != undef and supportId != undef {
           exec { "exec emocmrsp ${opversion}":
-            cwd      => "${patchDir}",
+            cwd      => $patchDir,
             command  => "${patchDir}/ocm/bin/emocmrsp -repeater NONE ${csiNumber} ${supportId}",
             require  => Exec["extract opatch ${patchFile}"],
           }

@@ -17,11 +17,12 @@ module Puppet
   
     to_get_raw_resources do
       Puppet.info "index #{name}"
-      wlst template('puppet:///modules/orawls/providers/wls_jms_subdeployment/index.py.erb', binding)
+      environment = { "action"=>"index","type"=>"wls_jms_subdeployment"}
+      wlst template('puppet:///modules/orawls/providers/wls_jms_subdeployment/index.py.erb', binding), environment
     end
 
     on_create  do | command_builder |
-      Puppet.info "create #{name} "
+      Puppet.info "create #{name}"
       template('puppet:///modules/orawls/providers/wls_jms_subdeployment/create.py.erb', binding)
     end
 
@@ -36,13 +37,34 @@ module Puppet
     end
 
     def self.title_patterns
-      identity = lambda {|x| x}
+      # possible values for /^((.*\/)?(.*):(.*)?)$/
+      # default/server1:channel1 with this as regex outcome 
+      #    default/server1:channel1  default/ server1 channel1
+      # server1:channel1 with this as regex outcome
+      #    server1  nil  server1 channel1
+      identity  = lambda {|x| x}
+      name      = lambda {|x| 
+          if x.include? "/"
+            x            # it contains a domain
+          else
+            'default/'+x # add the default domain
+          end
+        }
+      optional  = lambda{ |x| 
+          if x.nil?
+            'default' # when not found use default
+          else
+            x[0..-2]  # remove the last char / from domain name
+          end
+        }
       [
         [
-          /^(.*):(.*)$/,
+          /^((.*\/)?(.*):(.*)?)$/,
           [
-            [ :jmsmodule, identity ],
-            [ :name, identity ]
+            [ :name                , name     ],
+            [ :domain              , optional ],
+            [ :jmsmodule           , identity ],
+            [ :subdeployment_name  , identity ]
           ]
         ],
         [
@@ -54,24 +76,11 @@ module Puppet
       ]
     end
 
+    parameter :domain
     parameter :name
+    parameter :subdeployment_name
     parameter :jmsmodule
     property  :target
     property  :targettype
-
-  private 
-
-    def jmsmodule
-       self[:jmsmodule]
-    end
-
-    def target
-      self[:target]
-    end
-
-    def targettype
-      self[:targettype]
-    end
-
   end
 end

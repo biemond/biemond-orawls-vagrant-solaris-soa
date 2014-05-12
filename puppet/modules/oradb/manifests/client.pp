@@ -1,18 +1,20 @@
 # == Class: oradb::client
 #
 #
-define oradb::client(    $version                 = undef,
-                         $file                    = undef,
-                         $oracleBase              = undef,
-                         $oracleHome              = undef,
-                         $createUser              = true,
-                         $user                    = 'oracle',
-                         $userBaseDir             = '/home',
-                         $group                   = 'dba',
-                         $downloadDir             = '/install',
-                         $puppetDownloadMntPoint  = undef,
-                         $remoteFile              = true,
-                         $logoutput               = true,
+define oradb::client(    
+  $version                 = undef,
+  $file                    = undef,
+  $oracleBase              = undef,
+  $oracleHome              = undef,
+  $createUser              = true,
+  $user                    = 'oracle',
+  $userBaseDir             = '/home',
+  $group                   = 'dba',
+  $group_install           = 'oinstall',
+  $downloadDir             = '/install',
+  $puppetDownloadMntPoint  = undef,
+  $remoteFile              = true,
+  $logoutput               = true,
 )
 {
   # check if the oracle software already exists
@@ -45,6 +47,8 @@ define oradb::client(    $version                 = undef,
       ora_inventory_dir    => $oraInventory,
       os_user              => $user,
       os_group             => $group,
+      os_group_install     => $group_install,
+      os_group_oper        => undef,
       download_dir         => $downloadDir,
       log_output           => true,
       user_base_dir        => $userBaseDir,
@@ -55,39 +59,31 @@ define oradb::client(    $version                 = undef,
     # db file installer zip
     if $remoteFile == true {
       file { "${downloadDir}/${file}":
+        ensure      => present,
         source      => "${mountPoint}/${file}",
         require     => Oradb::Utils::Structure["oracle structure ${version}"],
-        ensure      => present,
-        mode        => 0775,
+        before      => "extract ${downloadDir}/${file}",
+        mode        => '0775',
         owner       => $user,
         group       => $group,
       }
-      exec { "extract ${downloadDir}/${file}":
-        command     => "unzip -o ${downloadDir}/${file} -d ${downloadDir}/client_${version}",
-        require     => File["${downloadDir}/${file}"],
-        creates     => "${downloadDir}/client_${version}/client/install/addLangs.sh",
-        timeout     => 0,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-       logoutput    => $logoutput,
-      }
+        $source = $downloadDir
     } else {
-      exec { "extract ${downloadDir}/${file}":
-        command     => "unzip -o ${mountPoint}/${file} -d ${downloadDir}/client_${version}",
-        creates     => "${downloadDir}/client_${version}/client/install/addLangs.sh",
-        require     => Oradb::Utils::Structure["oracle structure ${version}"],
-        timeout     => 0,
-        path        => $execPath,
-        user        => $user,
-        group       => $group,
-       logoutput    => $logoutput,
-      }
+        $source = $mountPoint
+    }
+    exec { "extract ${downloadDir}/${file}":
+      command     => "unzip -o ${source}/${file} -d ${downloadDir}/client_${version}",
+      require     => Oradb::Utils::Structure["oracle structure ${version}"],
+      timeout     => 0,
+      path        => $execPath,
+      user        => $user,
+      group       => $group,
+      logoutput   => false,
     }
 
     oradb::utils::orainst{"oracle orainst ${version}":
       ora_inventory_dir => $oraInventory,
-      os_group          => $group,
+      os_group          => $group_install,
     }
 
     if ! defined(File["${downloadDir}/db_client_${version}.rsp"]) {
@@ -95,7 +91,7 @@ define oradb::client(    $version                 = undef,
         ensure      => present,
         content     => template("oradb/db_client_${version}.rsp.erb"),
         require     => Oradb::Utils::Orainst["oracle orainst ${version}"],
-        mode        => 0775,
+        mode        => '0775',
         owner       => $user,
         group       => $group,
       }
@@ -112,7 +108,7 @@ define oradb::client(    $version                 = undef,
       returns     => [6,0],
       path        => $execPath,
       user        => $user,
-      group       => $group,
+      group       => $group_install,
       logoutput   => $logoutput,
     }
 
@@ -129,7 +125,7 @@ define oradb::client(    $version                 = undef,
       ensure       => present,
       content      => template("oradb/netca_client_${version}.rsp.erb"),
       require      => Exec["run root.sh script ${title}"],
-      mode         => 0775,
+      mode         => '0775',
       owner        => $user,
       group        => $group,
     }
@@ -150,7 +146,7 @@ define oradb::client(    $version                 = undef,
       file { "${userBaseDir}/${user}/.bash_profile":
         ensure        => present,
         content       => template("oradb/bash_profile.erb"),
-        mode          => 0775,
+        mode          => '0775',
         owner         => $user,
         group         => $group,
       }
