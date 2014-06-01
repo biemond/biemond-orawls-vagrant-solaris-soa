@@ -3,34 +3,43 @@
 # setup a new weblogic domain
 ##
 define orawls::domain (
-  $version                    = hiera('wls_version'               , 1111),  # 1036|1111|1211|1212
-  $weblogic_home_dir          = hiera('wls_weblogic_home_dir'     , undef), # /opt/oracle/middleware11gR1/wlserver_103
-  $middleware_home_dir        = hiera('wls_middleware_home_dir'   , undef), # /opt/oracle/middleware11gR1
-  $jdk_home_dir               = hiera('wls_jdk_home_dir'          , undef), # /usr/java/jdk1.7.0_45
-  $wls_domains_dir            = hiera('wls_domains_dir'           , undef),
-  $wls_apps_dir               = hiera('wls_apps_dir'              , undef),
-  $domain_template            = "standard",                                 # adf|osb|osb_soa_bpm|osb_soa|soa|soa_bpm|wc|wc_wcc_bpm
-  $domain_name                = hiera('domain_name'               , undef),
-  $development_mode           = true,
-  $adminserver_name           = hiera('domain_adminserver'        , "AdminServer"),
-  $adminserver_address        = hiera('domain_adminserver_address', undef),
-  $adminserver_port           = hiera('domain_adminserver_port'   , 7001),
-  $java_arguments             = hiera('java_arguments', {}),               # java_arguments = { "ADM" => "...", "OSB" => "...", "SOA" => "...", "BAM" => "..."}
-  $nodemanager_address        = undef,
-  $nodemanager_port           = hiera('domain_nodemanager_port'   , 5556),
-  $weblogic_user              = hiera('wls_weblogic_user'         , "weblogic"),
-  $weblogic_password          = hiera('domain_wls_password'       , undef),
-  $jsse_enabled               = hiera('wls_jsse_enabled'          , false),
-  $os_user                    = hiera('wls_os_user'               , undef), # oracle
-  $os_group                   = hiera('wls_os_group'              , undef), # dba
-  $download_dir               = hiera('wls_download_dir'          , undef), # /data/install
-  $log_dir                    = hiera('wls_log_dir'               , undef), # /data/logs
-  $log_output                 = false, # true|false
-  $repository_database_url    = hiera('repository_database_url'   , undef), #jdbc:oracle:thin:@192.168.50.5:1521:XE
-  $rcu_database_url           = undef,                                      #localhost:1521:XE"
-  $repository_prefix          = hiera('repository_prefix'         , "DEV"),
-  $repository_password        = hiera('repository_password'       , "Welcome01"),
-  $repository_sys_password    = undef,
+  $version                               = hiera('wls_version'                   , 1111),  # 1036|1111|1211|1212
+  $weblogic_home_dir                     = hiera('wls_weblogic_home_dir'         , undef), # /opt/oracle/middleware11gR1/wlserver_103
+  $middleware_home_dir                   = hiera('wls_middleware_home_dir'       , undef), # /opt/oracle/middleware11gR1
+  $jdk_home_dir                          = hiera('wls_jdk_home_dir'              , undef), # /usr/java/jdk1.7.0_45
+  $wls_domains_dir                       = hiera('wls_domains_dir'               , undef),
+  $wls_apps_dir                          = hiera('wls_apps_dir'                  , undef),
+  $domain_template                       = hiera('domain_template'               , "standard"), # adf|osb|osb_soa_bpm|osb_soa|soa|soa_bpm|wc|wc_wcc_bpm
+  $domain_name                           = hiera('domain_name'                   , undef),
+  $development_mode                      = true,
+  $adminserver_name                      = hiera('domain_adminserver'            , "AdminServer"),
+  $adminserver_address                   = hiera('domain_adminserver_address'    , undef),
+  $adminserver_port                      = hiera('domain_adminserver_port'       , 7001),
+  $java_arguments                        = hiera('domain_java_arguments'         , {}),         # java_arguments = { "ADM" => "...", "OSB" => "...", "SOA" => "...", "BAM" => "..."}
+  $nodemanager_address                   = undef,
+  $nodemanager_port                      = hiera('domain_nodemanager_port'       , 5556),
+  $weblogic_user                         = hiera('wls_weblogic_user'             , "weblogic"),
+  $weblogic_password                     = hiera('domain_wls_password'           , undef),
+  $jsse_enabled                          = hiera('wls_jsse_enabled'              , false),
+  $webtier_enabled                       = false,
+  $os_user                               = hiera('wls_os_user'                   , undef), # oracle
+  $os_group                              = hiera('wls_os_group'                  , undef), # dba
+  $download_dir                          = hiera('wls_download_dir'              , undef), # /data/install
+  $log_dir                               = hiera('wls_log_dir'                   , undef), # /data/logs
+  $log_output                            = false, # true|false
+  $repository_database_url               = hiera('repository_database_url'       , undef), #jdbc:oracle:thin:@192.168.50.5:1521:XE
+  $rcu_database_url                      = undef,                                      #localhost:1521:XE"
+  $repository_prefix                     = hiera('repository_prefix'             , "DEV"),
+  $repository_password                   = hiera('repository_password'           , "Welcome01"),
+  $repository_sys_password               = undef,
+  $custom_trust                          = hiera('wls_custom_trust'              , false),
+  $trust_keystore_file                   = hiera('wls_trust_keystore_file'       , undef),
+  $trust_keystore_passphrase             = hiera('wls_trust_keystore_passphrase' , undef),
+  $custom_identity                       = false,
+  $custom_identity_keystore_filename     = undef,
+  $custom_identity_keystore_passphrase   = undef,
+  $custom_identity_alias                 = undef,
+  $custom_identity_privatekey_passphrase = undef,
 )
 {
   if ( $wls_domains_dir == undef ) {
@@ -94,6 +103,8 @@ define orawls::domain (
       $templateApplCore  = "${middleware_home_dir}/oracle_common/common/templates/applications/oracle.applcore.model.stub.12.1.3_template.jar"
       $templateWSMPM     = "${middleware_home_dir}/oracle_common/common/templates/wls/oracle.wsmpm_template_12.1.2.jar"
 
+      $templateOHS       = "${middleware_home_dir}/ohs/common/templates/wls/ohs_managed_template_12.1.2.jar"
+      $templateEMWebTier = "${middleware_home_dir}/em/common/templates/wls/oracle.em_webtier_template_12.1.2.jar"
 
     } else {
       $template          = "${weblogic_home_dir}/common/templates/domains/wls.jar"

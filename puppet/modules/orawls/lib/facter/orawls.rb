@@ -827,7 +827,6 @@ Facter.add("ora_inst_loc_data") do
   end
 end
 
-Puppet.info "orawls.rb ora_inst_products #{oraProducts}"
 # get orainst products
 Facter.add("ora_inst_products") do
   setcode do
