@@ -18,6 +18,8 @@ extraproperties            = '<%= extraproperties %>'
 extrapropertiesvalues      = '<%= extrapropertiesvalues %>'
 maxcapacity                = '<%= maxcapacity %>'
 initialcapacity            = '<%= initialcapacity %>'
+fanenabled                 = '<%= fanenabled %>'
+onsnodelist                = '<%= onsnodelist %>'
 
 
 edit()
@@ -31,7 +33,9 @@ try:
     cmo.setName(name)
 
     cd('/JDBCSystemResources/' + name + '/JDBCResource/' + name + '/JDBCDataSourceParams/' + name )
-    set('JNDINames', jarray.array([String(jndinames)], String))
+    if jndinames: 
+      jndis = String(jndinames).split(",")  
+      set('JNDINames',jarray.array(jndis, String))
 
     cd('/JDBCSystemResources/' + name + '/JDBCResource/' + name + '/JDBCDriverParams/' + name )
     cmo.setUrl(url)
@@ -70,6 +74,16 @@ try:
 
     cd('/JDBCSystemResources/' + name + '/JDBCResource/' + name + '/JDBCDataSourceParams/' + name)
     cmo.setGlobalTransactionsProtocol(globaltransactionsprotocol)
+
+    try:
+        cd('/JDBCSystemResources/' + name + '/JDBCResource/' + name + '/JDBCOracleParams/' + name )
+        if fanenabled == '1':
+            cmo.setFanEnabled(true)
+        else:
+            cmo.setFanEnabled(false)
+        cmo.setOnsNodeList(onsnodelist)
+    except:
+        print "Datasource Driver %s does not support ONS parameters." % drivername
 
     cd('/SystemResources/' + name )
 
