@@ -77,10 +77,10 @@ fmw_installations:
     remote_file:             false
 
 opatch_instances:
-  '17014142':
+  '17584181':
      oracle_product_home_dir:  "/opt/oracle/middleware11g/Oracle_SOA1"
-     patch_id:                 "17014142"
-     patch_file:               "p17014142_111170_Generic.zip"
+     patch_id:                 "17584181"
+     patch_file:               "p17584181_111170_Generic.zip"
      remote_file:              false
 
 # handy WebLogic scripts in /opt/scripts/wls
