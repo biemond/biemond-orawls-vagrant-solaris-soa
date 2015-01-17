@@ -32,7 +32,7 @@ wls_os_user:              &wls_os_user              "oracle"
 wls_os_group:             &wls_os_group             "dba"
 wls_download_dir:         &wls_download_dir         "/data/install"
 wls_source:               &wls_source               "/software"
-wls_jdk_home_dir:         &wls_jdk_home_dir         "/usr/jdk/jdk1.7.0_45"
+wls_jdk_home_dir:         &wls_jdk_home_dir         "/usr/jdk/jdk1.7.0_71"
 wls_log_dir:              &wls_log_dir              "/data/logs"
 
 wls_jsse_enabled:         false

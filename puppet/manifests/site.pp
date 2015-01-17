@@ -248,13 +248,13 @@ class java {
 
   notice 'class java'
 
-  jdksolaris::install7{'jdk1.7.0_45':
-    version              => '7u45',
-    fullVersion          => 'jdk1.7.0_45',
+  jdksolaris::install7{'jdk1.7.0_71':
+    version              => '7u71',
+    fullVersion          => 'jdk1.7.0_71',
     x64                  => true,
-    downloadDir          => '/data/install',
+    downloadDir          => '/var/tmp/install',
     sourcePath           => "/software",
-  }  
+  }
 
 }
 
